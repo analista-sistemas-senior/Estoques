@@ -1,0 +1,304 @@
+@Estoques.API_HostAddress = http://localhost:5237
+
+### Login do Usuário (Gerar o Token JWT)
+# @name login
+POST {{Estoques.API_HostAddress}}/api/autenticacao/login
+Content-Type: application/json
+
+{
+  "NMLogin": "teste",
+  "CDSenha": "123123"
+}
+
+### USUARIO =======================================================
+
+### Cadastro do Usuário
+POST {{Estoques.API_HostAddress}}/api/usuarios
+Content-Type: application/json
+
+{
+  "NMUsuario": "Testador",
+  "NMLogin": "teste",
+  "CDSenha": "123123"
+}
+
+### Atualização do Usuário
+PUT {{Estoques.API_HostAddress}}/api/usuarios
+Content-Type: application/json
+Authorization: Bearer {{login.response.body.$.cdToken}}
+
+{
+  "IDUsuario": 1,
+  "NMUsuario": "Testador Atualizado",
+  "NMLogin": "teste",
+  "CDSenha": "123123"
+}
+
+### Perfil do Usuário
+GET {{Estoques.API_HostAddress}}/api/usuarios/perfil
+Content-Type: application/json
+Authorization: Bearer {{login.response.body.$.cdToken}}
+
+
+
+### Adquirente ====================================================
+
+### Retorna Adquirente
+GET {{Estoques.API_HostAddress}}/api/adquirentes
+Content-Type: application/json
+Authorization: Bearer {{login.response.body.$.cdToken}}
+
+### Cadastro do Adquirente
+POST {{Estoques.API_HostAddress}}/api/adquirentes
+Content-Type: application/json
+Authorization: Bearer {{login.response.body.$.cdToken}}
+
+{
+  "NMAdquirente": "Adquirente Teste",
+  "TXEndereco": "Rua Teste",
+  "TXAnotacao": "Anotação Teste"
+}
+
+### Atualização do Adquirente
+PUT {{Estoques.API_HostAddress}}/api/adquirentes
+Content-Type: application/json
+Authorization: Bearer {{login.response.body.$.cdToken}}
+
+{
+  "IDAdquirente" : 1,
+  "NMAdquirente": "Adquirente Teste Atualizado",
+  "TXEndereco": "Rua Teste Atualizado",
+  "TXAnotacao": "Anotação Teste Atualizado"
+}
+
+### Exclusão do Adquirente
+DELETE {{Estoques.API_HostAddress}}/api/adquirentes/12
+Content-Type: application/json
+Authorization: Bearer {{login.response.body.$.cdToken}}
+
+
+
+### Fornecedor ====================================================
+
+### Retorna Fornecedor
+GET {{Estoques.API_HostAddress}}/api/fornecedores
+Content-Type: application/json
+Authorization: Bearer {{login.response.body.$.cdToken}}
+
+### Cadastro do Fornecedor
+POST {{Estoques.API_HostAddress}}/api/fornecedores
+Content-Type: application/json
+Authorization: Bearer {{login.response.body.$.cdToken}}
+
+{
+  "NMFornecedor": "Fornecedor Teste",
+  "TXEndereco": "Rua Teste",
+  "TXAnotacao": "Anotação Teste"
+}
+
+### Atualização do Fornecedor
+PUT {{Estoques.API_HostAddress}}/api/fornecedores
+Content-Type: application/json
+Authorization: Bearer {{login.response.body.$.cdToken}}
+
+{
+  "IDFornecedor" : 1,
+  "NMFornecedor": "Fornecedor Teste Atualizado",
+  "TXEndereco": "Rua Teste Atualizado",
+  "TXAnotacao": "Anotação Teste Atualizado"
+}
+
+### Exclusão do Fornecedor
+DELETE {{Estoques.API_HostAddress}}/api/fornecedores/5
+Content-Type: application/json
+Authorization: Bearer {{login.response.body.$.cdToken}}
+
+
+
+### Produto Fabricante ============================================
+
+### Retorna Produto Fabricante
+GET {{Estoques.API_HostAddress}}/api/produtos/fabricantes
+Content-Type: application/json
+Authorization: Bearer {{login.response.body.$.cdToken}}
+
+### Cadastro do Produto Fabricante
+POST {{Estoques.API_HostAddress}}/api/produtos/fabricantes
+Content-Type: application/json
+Authorization: Bearer {{login.response.body.$.cdToken}}
+
+{
+  "NMProdutoFabricante": "Fabricante Teste"
+}
+
+### Atualização do Produto Fabricante
+PUT {{Estoques.API_HostAddress}}/api/produtos/fabricantes
+Content-Type: application/json
+Authorization: Bearer {{login.response.body.$.cdToken}}
+
+{
+  "IDProdutoFabricante" : 1,
+  "NMProdutoFabricante": "Fabricante Teste Atualizado"
+}
+
+### Exclusão do Produto Fabricante
+DELETE {{Estoques.API_HostAddress}}/api/produtos/fabricantes/3
+Content-Type: application/json
+Authorization: Bearer {{login.response.body.$.cdToken}}
+
+
+
+### Produto Situacao ==============================================
+
+### Retorna Produto Situacao
+GET {{Estoques.API_HostAddress}}/api/produtos/situacoes
+Content-Type: application/json
+Authorization: Bearer {{login.response.body.$.cdToken}}
+
+### Cadastro do Produto Situacao
+POST {{Estoques.API_HostAddress}}/api/produtos/situacoes
+Content-Type: application/json
+Authorization: Bearer {{login.response.body.$.cdToken}}
+
+{
+  "NMProdutoSituacao": "Situação Teste"
+}
+
+### Atualização do Produto Situacao
+PUT {{Estoques.API_HostAddress}}/api/produtos/situacoes
+Content-Type: application/json
+Authorization: Bearer {{login.response.body.$.cdToken}}
+
+{
+  "IDProdutoSituacao" : 1,
+  "NMProdutoSituacao": "Situação Teste Atualizado"
+}
+
+### Exclusão do Produto Situacao
+DELETE {{Estoques.API_HostAddress}}/api/produtos/situacoes/3
+Content-Type: application/json
+Authorization: Bearer {{login.response.body.$.cdToken}}
+
+
+
+### Produto Tipo ==================================================
+
+### Retorna Produto Tipo
+GET {{Estoques.API_HostAddress}}/api/produtos/tipos
+Content-Type: application/json
+Authorization: Bearer {{login.response.body.$.cdToken}}
+
+### Cadastro do Produto Tipo
+POST {{Estoques.API_HostAddress}}/api/produtos/tipos
+Content-Type: application/json
+Authorization: Bearer {{login.response.body.$.cdToken}}
+
+{
+  "NMProdutoTipo": "Tipo Teste"
+}
+
+### Atualização do Produto Tipo
+PUT {{Estoques.API_HostAddress}}/api/produtos/tipos
+Content-Type: application/json
+Authorization: Bearer {{login.response.body.$.cdToken}}
+
+{
+  "IDProdutoTipo" : 1,
+  "NMProdutoTipo": "Tipo Teste Atualizado"
+}
+
+### Exclusão do Produto Tipo
+DELETE {{Estoques.API_HostAddress}}/api/produtos/tipos/3
+Content-Type: application/json
+Authorization: Bearer {{login.response.body.$.cdToken}}
+
+
+
+### Produto =======================================================
+
+### Retorna Produto
+GET {{Estoques.API_HostAddress}}/api/produtos
+Content-Type: application/json
+Authorization: Bearer {{login.response.body.$.cdToken}}
+
+### Cadastro do Produto
+POST {{Estoques.API_HostAddress}}/api/produtos
+Content-Type: application/x-www-form-urlencoded
+Authorization: Bearer {{login.response.body.$.cdToken}}
+
+IDProdutoTipo=1
+&IDProdutoSituacao=1
+&IDProdutoFabricante=1
+&NMProduto=Produto Teste
+&DSProduto=Descrição Teste
+&INProdutoCor=1
+&QTProduto=10.50
+
+### Atualização do Produto
+PUT {{Estoques.API_HostAddress}}/api/produtos
+Content-Type: application/x-www-form-urlencoded
+Authorization: Bearer {{login.response.body.$.cdToken}}
+
+IDProduto=1
+IDProdutoTipo=1
+&IDProdutoSituacao=1
+&IDProdutoFabricante=1
+&NMProduto=Produto Teste
+&DSProduto=Descrição Teste
+&INProdutoCor=1
+&QTProduto=10.50
+
+### Exclusão do Produto
+DELETE {{Estoques.API_HostAddress}}/api/produtos/8
+Content-Type: application/json
+Authorization: Bearer {{login.response.body.$.cdToken}}
+
+
+
+### Produto Histórico =============================================
+
+### Retorna Histórico
+GET {{Estoques.API_HostAddress}}/api/produtos/historicos
+Content-Type: application/json
+Authorization: Bearer {{login.response.body.$.cdToken}}
+
+### Retorna Histórico por Produto
+GET {{Estoques.API_HostAddress}}/api/produtos/historicos/1
+Content-Type: application/json
+Authorization: Bearer {{login.response.body.$.cdToken}}
+
+### Cadastro do Histórico
+POST {{Estoques.API_HostAddress}}/api/produtos/historicos
+Content-Type: application/json
+Authorization: Bearer {{login.response.body.$.cdToken}}
+
+{
+  "IDProduto": 1,
+  "IDFornecedor": 1,
+  "IDAdquirente": null,
+  "INProdutoHistoricoTipo": 1,
+  "DTProdutoHistorico": "2026-07-01",
+  "QTProdutoHistorico": 1,
+  "VLProdutoHistorico": 29.97
+}
+
+### Atualização do Histórico
+PUT {{Estoques.API_HostAddress}}/api/produtos/historicos
+Content-Type: application/json
+Authorization: Bearer {{login.response.body.$.cdToken}}
+
+{
+  "IDProdutoHistorico": 1,
+  "IDProduto": 1,
+  "IDFornecedor": 1,
+  "IDAdquirente": 1,
+  "INProdutoHistoricoTipo": 1,
+  "DTProdutoHistorico": "2026-07-02",
+  "QTProdutoHistorico": 1,
+  "VLProdutoHistorico": 19.97
+}
+
+### Exclusão do Histórico
+DELETE {{Estoques.API_HostAddress}}/api/produtos/historicos/3
+Content-Type: application/json
+Authorization: Bearer {{login.response.body.$.cdToken}}

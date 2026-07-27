@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="Estoques.API/Estoques.API.csproj" />
+  <Project Path="Estoques.Domain/Estoques.Domain.csproj" Id="75d32efa-1e8e-414c-ac15-7ace402ae76f" />
+  <Project Path="Estoques.Infra.Data/Estoques.Infra.Data.csproj" Id="7cfbdeb7-b960-4b88-a241-243513a95be8" />
+  <Project Path="Estoques.Service/Estoques.Service.csproj" Id="2f1bddb4-c1a7-4833-9c6e-bbeec06158bf" />
+</Solution>
