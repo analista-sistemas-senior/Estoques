@@ -1,0 +1,18 @@
+{
+  "ConnectionStrings": {
+    "DefaultConnection": "Host=localhost;Port=5432;Database=Estoques;Username=postgres;Password=__SUA_SENHA__"
+  },
+  "Logging": {
+    "LogLevel": {
+      "Default": "Information",
+      "Microsoft.AspNetCore": "Warning"
+    }
+  },
+  "JwtSettings": {
+    "Secret": "__SUA_CHAVE_SECRETA_256b__",
+    "ExpiracaoTempo": 60,
+    "Emissor": "API de Estoques",
+    "Audiencia": "Angular"
+  },
+  "AllowedHosts": "*"
+}
