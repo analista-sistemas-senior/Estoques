@@ -1,6 +1,6 @@
 {
   "ConnectionStrings": {
-    "DefaultConnection": "Host=localhost;Port=5432;Database=Estoques;Username=postgres;Password=__SUA_SENHA__"
+    "DefaultConnection": "Host=localhost;Port=5433;Database=Estoques;Username=postgres;Password=__SUA_SENHA__"
   },
   "Logging": {
     "LogLevel": {
