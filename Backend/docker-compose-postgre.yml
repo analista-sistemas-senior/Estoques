@@ -1,16 +1,22 @@
 services:
-  postgres-db-estoques:
+  postgres_db_estoques:
     image: postgres:16-alpine
-    container_name: EstoquesPostgre
+    container_name: estoques_postgre
     environment:
       POSTGRES_USER: ${DB_USER}
       POSTGRES_PASSWORD: ${DB_PASSWORD}
       POSTGRES_DB: ${DB_NAME}
     ports:
       - "5433:5432"
+    networks:
+      - estoques_network
     volumes:
       - estoques_postgres_data:/var/lib/postgresql/data
     restart: always
+
+networks:
+  estoques_network:
+    name: estoques_network
 
 volumes:
   estoques_postgres_data:
