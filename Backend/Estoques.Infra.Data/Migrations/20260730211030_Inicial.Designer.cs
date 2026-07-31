@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Estoques.Infra.Data.Migrations
 {
     [DbContext(typeof(EstoquesDbContext))]
-    [Migration("20260714212130_Inicial")]
+    [Migration("20260730211030_Inicial")]
     partial class Inicial
     {
         /// <inheritdoc />
@@ -20,7 +20,7 @@ namespace Estoques.Infra.Data.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "10.0.9")
+                .HasAnnotation("ProductVersion", "10.0.10")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -96,7 +96,6 @@ namespace Estoques.Infra.Data.Migrations
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("IDProduto"));
 
                     b.Property<string>("DSProduto")
-                        .IsRequired()
                         .HasMaxLength(1024)
                         .HasColumnType("character varying(1024)");
 
@@ -127,7 +126,7 @@ namespace Estoques.Infra.Data.Migrations
                         .HasMaxLength(255)
                         .HasColumnType("character varying(255)");
 
-                    b.Property<decimal>("QTProduto")
+                    b.Property<decimal?>("QTProduto")
                         .HasColumnType("numeric(18,2)");
 
                     b.HasKey("IDProduto");

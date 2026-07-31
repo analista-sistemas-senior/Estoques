@@ -11,9 +11,9 @@ namespace Estoques.Infra.Data.Mappings
             builder.ToTable("Produto");
             builder.HasKey(p => p.IDProduto);
             builder.Property(p => p.NMProduto).HasMaxLength(255).IsRequired();
-            builder.Property(p => p.DSProduto).HasMaxLength(1024).IsRequired();
+            builder.Property(p => p.DSProduto).HasMaxLength(1024).IsRequired(false);
             builder.Property(p => p.INProdutoCor).HasColumnType("smallint").IsRequired();
-            builder.Property(p => p.QTProduto).HasColumnType("numeric(18,2)").IsRequired();
+            builder.Property(p => p.QTProduto).HasColumnType("numeric(18,2)").IsRequired(false);
             builder.Property(p => p.INProdutoMedida).HasColumnType("smallint").IsRequired(false);
             builder.Property(p => p.LKProdutoImagem).HasMaxLength(1024).IsRequired(false);
 

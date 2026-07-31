@@ -10,9 +10,9 @@ namespace Estoques.Domain.Entities
         public int IDProdutoFabricante { get; private set; }
         public int IDUsuario { get; private set; }
         public string NMProduto { get; private set; } = string.Empty;
-        public string DSProduto { get; private set; } = string.Empty;
+        public string? DSProduto { get; private set; }
         public ProdutoCor INProdutoCor { get; private set; }
-        public decimal QTProduto { get; private set; }
+        public decimal? QTProduto { get; private set; }
         public ProdutoMedida? INProdutoMedida { get; private set; }
         public string? LKProdutoImagem { get; private set; }
 
@@ -23,7 +23,7 @@ namespace Estoques.Domain.Entities
         public virtual ICollection<ProdutoHistorico> ProdutosHistoricos { get; set; } = [];
 
         public Produto() {}
-        public Produto(int idProduto, int idProdutoTipo, int idProdutoSituacao, int idProdutoFabricante, int idUsuario, string nmProduto, string dsProduto, ProdutoCor inProdutoCor, decimal qtProduto, ProdutoMedida? inProdutoMedida, string? lkProdutoImagem)
+        public Produto(int idProduto, int idProdutoTipo, int idProdutoSituacao, int idProdutoFabricante, int idUsuario, string nmProduto, string? dsProduto, ProdutoCor inProdutoCor, decimal? qtProduto, ProdutoMedida? inProdutoMedida, string? lkProdutoImagem)
         {
             IDProduto = idProduto;
             IDProdutoTipo = idProdutoTipo;

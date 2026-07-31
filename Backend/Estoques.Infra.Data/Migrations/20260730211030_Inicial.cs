@@ -142,9 +142,9 @@ namespace Estoques.Infra.Data.Migrations
                     IDProdutoFabricante = table.Column<int>(type: "integer", nullable: false),
                     IDUsuario = table.Column<int>(type: "integer", nullable: false),
                     NMProduto = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: false),
-                    DSProduto = table.Column<string>(type: "character varying(1024)", maxLength: 1024, nullable: false),
+                    DSProduto = table.Column<string>(type: "character varying(1024)", maxLength: 1024, nullable: true),
                     INProdutoCor = table.Column<byte>(type: "smallint", nullable: false),
-                    QTProduto = table.Column<decimal>(type: "numeric(18,2)", nullable: false),
+                    QTProduto = table.Column<decimal>(type: "numeric(18,2)", nullable: true),
                     INProdutoMedida = table.Column<byte>(type: "smallint", nullable: true),
                     LKProdutoImagem = table.Column<string>(type: "character varying(1024)", maxLength: 1024, nullable: true)
                 },

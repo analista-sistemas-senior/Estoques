@@ -1,6 +1,6 @@
 ﻿using Estoques.API.Controllers.Base;
 using Estoques.API.Services;
-using Estoques.Service.DTOs;
+using Estoques.Service.DTOs.Produto;
 using Estoques.Service.Interfaces;
 using FluentValidation;
 using Microsoft.AspNetCore.Authorization;
@@ -10,22 +10,22 @@ using Microsoft.EntityFrameworkCore;
 namespace Estoques.API.Controllers
 {
     [Authorize]
-    public class ProdutoController(IProdutoService produtoService, IValidator<ProdutoDTO> validador, IWebHostEnvironment ambiente, IArmazenamentoService armazenamentoService) : ControladorBase
+    public class ProdutoController(IProdutoService produtoService, IValidator<ProdutoEntradaDTO> validador, IWebHostEnvironment ambiente, IArmazenamentoService armazenamentoService) : ControladorBase
     {
         private readonly IProdutoService _produtoService = produtoService;
-        private readonly IValidator<ProdutoDTO> _validador = validador;
+        private readonly IValidator<ProdutoEntradaDTO> _validador = validador;
         private readonly IWebHostEnvironment _ambiente = ambiente;
         private readonly IArmazenamentoService _armazenamentoService = armazenamentoService;
 
         [HttpGet("produtos")]
-        public async Task<ActionResult<IEnumerable<ProdutoDTO>>> RetornarProdutosPorIdUsuario()
+        public async Task<ActionResult<IEnumerable<ProdutoSaidaDTO>>> RetornarProdutosPorIdUsuario()
         {
             var produtos = await _produtoService.RetornarProdutosPorIdUsuario(IDUsuarioLogado);
             return produtos == null ? NotFound(new { mensagem = "Não encontrado" }) : Ok(produtos);
         }
 
         [HttpPost("produtos")]
-        public async Task<IActionResult> CadastrarProduto([FromForm] ProdutoDTO produtoDTO)
+        public async Task<IActionResult> CadastrarProduto([FromForm] ProdutoEntradaDTO produtoDTO)
         {
             var validacaoDTO = await _validador.ValidateAsync(produtoDTO);
             if (!validacaoDTO.IsValid) return BadRequest(new { mensagem = validacaoDTO.Errors.FirstOrDefault()?.ErrorMessage });
@@ -55,7 +55,7 @@ namespace Estoques.API.Controllers
         }
 
         [HttpPut("produtos")]
-        public async Task<IActionResult> AtualizarProduto([FromForm] ProdutoDTO produtoDTO)
+        public async Task<IActionResult> AtualizarProduto([FromForm] ProdutoEntradaDTO produtoDTO)
         {
             var validacaoDTO = await _validador.ValidateAsync(produtoDTO);
             if (!validacaoDTO.IsValid) return BadRequest(new { mensagem = validacaoDTO.Errors.FirstOrDefault()?.ErrorMessage });
