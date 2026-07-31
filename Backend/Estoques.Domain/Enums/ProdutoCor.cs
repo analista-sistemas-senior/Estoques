@@ -2,14 +2,16 @@
 {
     public enum ProdutoCor : byte
     {
-        Nenhuma = 0,
-        Preto = 1,
-        Branco = 2,
+        Outra = 0,
+        Preta = 1,
+        Branca = 2,
         Cinza = 3,
-        Vermelho = 4,
+        Vermelha = 4,
         Azul = 5,
         Verde = 6,
-        Amarelo = 7,
-        Marrom = 8
+        Amarela = 7,
+        Marrom = 8,
+        Rosa = 9,
+        Roxa = 10
     }
 }
