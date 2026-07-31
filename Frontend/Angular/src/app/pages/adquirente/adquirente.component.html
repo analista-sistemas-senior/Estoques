@@ -1,0 +1,53 @@
+<div class="flex justify-between items-center mb-4">
+    <div class="flex items-center gap-3">
+        <mat-icon class="scale-150 me-2">people</mat-icon>
+        <div class="flex flex-col">
+            <h1 class="text-xl font-bold text-gray-800 leading-tight">Adquirentes</h1>
+            <p class="text-sm text-gray-500">Lista de adquirentes</p>
+        </div>
+    </div>
+    <button mat-raised-button color="primary" class="bg-cor-padrao text-white" (click)="abrirModal()">
+        <mat-icon>add</mat-icon> Novo
+    </button>
+</div>
+<hr class="border-t border-gray-300 mb-10"/>  
+<div class="mb-1">
+    <mat-form-field appearance="outline" class="w-full text-sm">
+        <mat-label>Pesquisar adquirente...</mat-label>
+        <input matInput (keyup)="aplicarFiltro($event)" #input>
+        <mat-icon matSuffix>search</mat-icon>
+    </mat-form-field>
+</div>  
+<div class="overflow-x-auto">
+    <table mat-table [dataSource]="dataSource" matSort class="w-full">
+        <ng-container matColumnDef="nmAdquirente">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Nome</th>
+            <td mat-cell *matCellDef="let element" class="font-medium">{{element.nmAdquirente}}</td>
+        </ng-container>
+        <ng-container matColumnDef="txEndereco">
+            <th mat-header-cell *matHeaderCellDef>Endereço</th>
+            <td mat-cell *matCellDef="let element">{{element.txEndereco ?? "-"}}</td>
+        </ng-container>
+        <ng-container matColumnDef="txAnotacao">
+            <th mat-header-cell *matHeaderCellDef>Anotação</th>
+            <td mat-cell *matCellDef="let element">{{element.txAnotacao ?? "-"}}</td>
+        </ng-container>
+        <ng-container matColumnDef="acoes">
+            <th mat-header-cell *matHeaderCellDef class="text-center"> Ações </th>
+            <td mat-cell *matCellDef="let element" class="text-center">
+                <button mat-icon-button color="primary" (click)="abrirModal(element)" title="Editar">
+                    <mat-icon>edit</mat-icon>
+                </button>
+                <button mat-icon-button color="warn" (click)="excluir(element.idAdquirente)" title="Excluir">
+                    <mat-icon>delete</mat-icon>
+                </button>
+            </td>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;" class="hover:bg-gray-50"></tr>
+        <tr class="mat-row" *matNoDataRow>
+            <td class="mat-cell p-4 text-center text-gray-500" colspan="6">Nenhum adquirente encontrado</td>
+        </tr>
+    </table>
+</div>
+<mat-paginator [pageSize]="100" [pageSizeOptions]="[5, 10, 25, 50, 100]" showFirstLastButtons aria-label="Selecione a página"></mat-paginator>

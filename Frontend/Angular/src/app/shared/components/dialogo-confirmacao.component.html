@@ -1,0 +1,15 @@
+<h2 mat-dialog-title class="flex items-center text-lg font-bold">
+    <mat-icon class="me-3 pt-1">delete</mat-icon>
+    <span>{{ dado.titulo || 'Excluir?' }}</span>
+</h2>
+<mat-dialog-content class="my-2 text-gray-600">
+    <p>{{ dado.mensagem || 'Esta ação não poderá ser desfeita!' }}</p>
+</mat-dialog-content>
+<mat-dialog-actions align="end" class="gap-2">
+    <button mat-button (click)="cancelar()">
+        {{ dado.textoCancelar || 'Cancelar' }}
+    </button>
+    <button mat-flat-button [color]="dado.corBotao || 'warn'" (click)="confirmar()">
+        {{ dado.textoConfirmar || 'Sim' }}
+    </button>
+</mat-dialog-actions>

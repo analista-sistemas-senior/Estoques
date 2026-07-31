@@ -1,0 +1,133 @@
+<div class="flex justify-between items-center mb-4">
+    <div class="flex items-center gap-3">
+        <mat-icon class="scale-150 me-2">history</mat-icon>
+        <div class="flex flex-col">
+            <h1 class="text-xl font-bold text-gray-800 leading-tight">Histórico dos produtos</h1>
+            <p class="text-sm text-gray-500">Lista de produtos</p>
+        </div>
+    </div>
+</div>
+<hr class="border-t border-gray-300 mb-10"/>
+<div class="mb-1">
+    <mat-form-field appearance="outline" class="w-full text-sm">
+        <mat-label>Pesquisar produto...</mat-label>
+        <input matInput (keyup)="aplicarFiltro($event)" #input>
+        <mat-icon matSuffix>search</mat-icon>
+    </mat-form-field>
+</div>  
+<div class="overflow-x-auto">
+    <table mat-table [dataSource]="dataSource" matSort class="w-full" multiTemplateDataRows>
+        <ng-container matColumnDef="expandir">
+            <th mat-header-cell *matHeaderCellDef>&nbsp;</th>
+            <td mat-cell *matCellDef="let element">
+                <button mat-icon-button (click)="toggleRow(element); $event.stopPropagation()">
+                    <mat-icon>{{ elementoExpandido == element.idProduto ? 'keyboard_arrow_down' : 'keyboard_arrow_right' }}</mat-icon>
+                </button>
+            </td>
+        </ng-container>
+        <ng-container matColumnDef="lkProdutoImagem">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Imagem</th>
+            <td mat-cell *matCellDef="let element">
+                @if (element.lkProdutoImagem) {
+                    <img [src]="apiBase + element.lkProdutoImagem" alt="Foto do produto" class="w-25 h-15 object-cover rounded-md border" />
+                  } @else {
+                    <div class="w-25 h-15 bg-gray-100 rounded-md border flex items-center justify-center text-gray-400">
+                        <mat-icon class="text-sm">image</mat-icon>
+                    </div>
+                  }
+            </td>
+        </ng-container>
+        <ng-container matColumnDef="nmProduto">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Nome</th>
+            <td mat-cell *matCellDef="let element">{{element.nmProduto}}</td>
+        </ng-container>
+        <ng-container matColumnDef="dsProduto">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Descrição</th>
+            <td mat-cell *matCellDef="let element">{{element.dsProduto}}</td>
+        </ng-container>
+        <ng-container matColumnDef="produtoTipo">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Tipo</th>
+            <td mat-cell *matCellDef="let element">{{element.produtoTipo.nmProdutoTipo}}</td>
+        </ng-container>
+        <ng-container matColumnDef="produtoFabricante">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Fabricante</th>
+            <td mat-cell *matCellDef="let element">{{element.produtoFabricante.nmProdutoFabricante}}</td>
+        </ng-container>
+        <ng-container matColumnDef="inProdutoCor">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Cor</th>
+            <td mat-cell *matCellDef="let element">{{retornarCor(element.inProdutoCor)}}</td>
+        </ng-container>
+        <ng-container matColumnDef="qtProduto">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Quantidade</th>
+            <td mat-cell *matCellDef="let element">{{element.qtProduto ?? "-"}}</td>
+        </ng-container>
+        <ng-container matColumnDef="inProdutoMedida">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Medida</th>
+            <td mat-cell *matCellDef="let element">{{retornarMedida(element.inProdutoMedida)}}</td>
+        </ng-container>
+        <ng-container matColumnDef="acoes">
+            <th mat-header-cell *matHeaderCellDef class="text-center"> Ações </th>
+            <td mat-cell *matCellDef="let element" class="text-center">
+                <button mat-icon-button color="primary" title="Editar" (click)="abrirModal(element)"><mat-icon>add</mat-icon></button>
+            </td>
+        </ng-container>
+        <ng-container matColumnDef="expandedDetail">
+            <td mat-cell *matCellDef="let element" [attr.colspan]="displayedColumns.length" class="p-0 border-0">
+                @if (element.idProduto == elementoExpandido) {
+                    <div class="element-detail element-detail-expanded">
+                        @if (element.produtoHistorico) {
+                            <div class="p-2 mx-0 mb-3 mt-2 border border-gray-300">
+                                @if (element.produtoHistorico.length == 0) {
+                                    <p class="text-gray-500 p-1 m-0 text-center text-sm">Nenhum histórico do produto encontrado</p>
+                                } @else {
+                                    <table mat-table [dataSource]="element.produtoHistorico">
+                                        <ng-container matColumnDef="data">
+                                            <th mat-header-cell *matHeaderCellDef class="pl-0! text-xs">Data</th>
+                                            <td mat-cell *matCellDef="let historico" class="text-sm"> {{ historico.dtProdutoHistorico | date:'dd/MM/yyyy' }} </td>
+                                        </ng-container>
+                                        <ng-container matColumnDef="tipo">
+                                            <th mat-header-cell *matHeaderCellDef class="pl-0! text-xs">Histórico</th>
+                                            <td mat-cell *matCellDef="let historico" class="text-sm"> {{ retornaNomeTipoHistorico(historico.inProdutoHistoricoTipo) }} </td>
+                                        </ng-container>
+                                        <ng-container matColumnDef="fornecedor">
+                                            <th mat-header-cell *matHeaderCellDef class="pl-0! text-xs">Fornecedor</th>
+                                            <td mat-cell *matCellDef="let historico" class="text-sm"> {{ historico.fornecedor?.nmFornecedor }} </td>
+                                        </ng-container>
+                                        <ng-container matColumnDef="adquirente">
+                                            <th mat-header-cell *matHeaderCellDef class="pl-0! text-xs">Adquirente</th>
+                                            <td mat-cell *matCellDef="let historico" class="text-sm"> {{ historico.adquirente?.nmAdquirente ?? '-' }} </td>
+                                        </ng-container>
+                                        <ng-container matColumnDef="quantidade">
+                                            <th mat-header-cell *matHeaderCellDef class="pl-0! text-xs">Quantidade</th>
+                                            <td mat-cell *matCellDef="let historico" class="text-sm"> {{ historico.qtProdutoHistorico ?? '-' }} </td>
+                                        </ng-container>
+                                        <ng-container matColumnDef="valor">
+                                            <th mat-header-cell *matHeaderCellDef class="pl-0! text-xs">Valor</th>
+                                            <td mat-cell *matCellDef="let historico" class="text-sm">R$ {{ historico.vlProdutoHistorico ?? '-' }} </td>
+                                        </ng-container>
+                                        <ng-container matColumnDef="acao">
+                                            <th mat-header-cell *matHeaderCellDef class="pl-0! text-xs">Ações</th>
+                                            <td mat-cell *matCellDef="let historico">
+                                                <button mat-icon-button class="scale-80" color="primary" (click)="abrirModal(element, historico)" title="Editar"><mat-icon>edit</mat-icon></button>
+                                                <button mat-icon-button class="scale-80" color="warn" (click)="excluir(historico.idProdutoHistorico)" title="Excluir"><mat-icon>delete</mat-icon></button>
+                                            </td>
+                                        </ng-container>
+                                        <tr mat-header-row *matHeaderRowDef="['data', 'tipo', 'fornecedor', 'adquirente', 'quantidade', 'valor', 'acao']"></tr>
+                                        <tr mat-row *matRowDef="let histRow; columns: ['data', 'tipo', 'fornecedor', 'adquirente', 'quantidade', 'valor', 'acao'];"></tr>
+                                    </table>
+                                }
+                            </div>
+                        }
+                    </div>
+                }
+            </td>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let element; columns: displayedColumns;" class="element-row" [class.expanded-row]="elementoExpandido == element.idProduto"></tr>
+        <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="detail-row"></tr>
+        <tr class="mat-row" *matNoDataRow>
+            <td class="mat-cell p-4 text-gray-500" colspan="6">Nenhum produto encontrado</td>
+        </tr>
+    </table>
+</div>
+<mat-paginator [pageSize]="100" [pageSizeOptions]="[5, 10, 25, 50, 100]" showFirstLastButtons aria-label="Selecione a página"></mat-paginator>

@@ -1,0 +1,78 @@
+<form [formGroup]="usuarioPerfilFormulario" (ngSubmit)="onSubmit()">
+    <div class="flex justify-between items-center mb-4">
+        <div class="flex items-center gap-3">
+            <mat-icon class="scale-150 me-2">person_outline</mat-icon>
+            <div class="flex flex-col">
+                <h1 class="text-xl font-bold text-gray-800 leading-tight">Meu Perfil</h1>
+                <p class="text-sm text-gray-500">Edite seus dados</p>
+            </div>        
+        </div>
+        <button mat-flat-button color="primary" type="submit" [disabled]="usuarioPerfilFormulario.invalid || carregando()">
+            @if (!carregando()) {
+                <span class="flex items-center gap-2">
+                    <mat-icon class="scale-90">save</mat-icon>
+                    <span>Atualizar</span>
+                </span>
+            }
+            @if (carregando()) {
+                <span>Atualizando...</span>
+            }
+        </button>
+    </div>
+    <hr class="border-t border-gray-300 mb-10"/>
+    <mat-form-field appearance="outline" class="w-full density-compact mb-2">
+        <mat-label>Nome</mat-label>
+        <input #nmUsuario matInput id="nmUsuario" formControlName="nmUsuario" placeholder="Digite seu nome" [readonly]="carregando()">
+        @if (usuarioPerfilFormulario.get('nmUsuario')?.hasError('required')) {
+            <mat-error>Campo obrigatório</mat-error>
+        }
+        @if (usuarioPerfilFormulario.get('nmUsuario')?.hasError('minlength')) {
+            <mat-error>Campo deve ter mais caracteres</mat-error>
+        }
+        @if (usuarioPerfilFormulario.get('nmUsuario')?.hasError('maxlength')) {
+            <mat-error>Campo deve ter menos caracteres</mat-error>
+        }
+    </mat-form-field>
+    <mat-form-field appearance="outline" class="w-full density-compact mb-2">
+        <mat-label>Usuário</mat-label>
+        <input matInput id="nmLogin" formControlName="nmLogin" placeholder="Digite seu login" [readonly]="carregando()" value="{{ usuario()?.nmLogin ?? '' }}">
+        @if (usuarioPerfilFormulario.get('nmLogin')?.hasError('required')) {
+            <mat-error>Campo obrigatório</mat-error>
+        }
+        @if (usuarioPerfilFormulario.get('nmLogin')?.hasError('minlength')) {
+            <mat-error>Campo deve ter mais caracteres</mat-error>
+        }
+        @if (usuarioPerfilFormulario.get('nmLogin')?.hasError('maxlength')) {
+            <mat-error>Campo deve ter menos caracteres</mat-error>
+        }
+    </mat-form-field>
+    <mat-form-field appearance="outline" class="w-full density-compact mb-2">
+        <mat-label>Senha</mat-label>
+        <input matInput id="cdSenha" type="password" formControlName="cdSenha" placeholder="Digite sua senha" [readonly]="carregando()">
+        @if (usuarioPerfilFormulario.get('cdSenha')?.hasError('required')) {
+            <mat-error>Campo obrigatório</mat-error>
+        }
+        @if (usuarioPerfilFormulario.get('cdSenha')?.hasError('minlength')) {
+            <mat-error>Campo deve ter mais caracteres</mat-error>
+        }
+        @if (usuarioPerfilFormulario.get('cdSenha')?.hasError('maxlength')) {
+            <mat-error>Campo deve ter menos caracteres</mat-error>
+        }
+    </mat-form-field>
+    <mat-form-field appearance="outline" class="w-full density-compact mb-2">
+        <mat-label>Repita a senha</mat-label>
+        <input matInput id="cdSenhaConfirmacao" type="password" formControlName="cdSenhaConfirmacao" placeholder="Redigite sua senha" [readonly]="carregando()">
+        @if (usuarioPerfilFormulario.get('cdSenhaConfirmacao')?.hasError('required')) {
+            <mat-error>Campo obrigatório</mat-error>
+        }
+        @if (usuarioPerfilFormulario.get('cdSenhaConfirmacao')?.hasError('minlength')) {
+            <mat-error>Campo deve ter mais caracteres</mat-error>
+        }
+        @if (usuarioPerfilFormulario.get('cdSenhaConfirmacao')?.hasError('maxlength')) {
+            <mat-error>Campo deve ter menos caracteres</mat-error>
+        }
+        @if (usuarioPerfilFormulario.get('cdSenhaConfirmacao')?.hasError('senhasDiferentes')) {
+            <mat-error>As senhas não coincidem</mat-error>
+        }
+    </mat-form-field>
+</form>

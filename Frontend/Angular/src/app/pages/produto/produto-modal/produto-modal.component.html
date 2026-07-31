@@ -1,0 +1,97 @@
+<h2 mat-dialog-title class="text-lg font-bold">
+    <mat-icon class="me-3 pt-1">inventory</mat-icon>
+    <span>{{ editando ? 'Produto' : 'Novo Produto' }}</span>
+</h2>
+<form [formGroup]="formulario" (ngSubmit)="salvar()">
+    <mat-dialog-content>
+        <mat-tab-group>
+            <mat-tab label="Dados principais">
+                <div class="flex flex-col gap-0 pt-8 h-75">
+                    <mat-form-field appearance="outline" class="w-full text-sm">
+                        <mat-label>Nome</mat-label>
+                        <input matInput formControlName="nmProduto">
+                    </mat-form-field>
+                    <mat-form-field appearance="outline" class="w-full text-sm">
+                        <mat-label>Descrição</mat-label>
+                        <input matInput formControlName="dsProduto">
+                    </mat-form-field>
+                    <mat-form-field appearance="outline" class="w-full">
+                        <mat-label>Tipo do produto</mat-label>
+                        <mat-select formControlName="idProdutoTipo">
+                            @for (tipo of produtoTipo; track tipo.idProdutoTipo) {
+                                <mat-option [value]="tipo.idProdutoTipo">
+                                    {{ tipo.nmProdutoTipo }}
+                                </mat-option>
+                            }
+                        </mat-select>
+                    </mat-form-field>
+                    <mat-form-field appearance="outline" class="w-full">
+                        <mat-label>Fabricante do produto</mat-label>
+                        <mat-select formControlName="idProdutoFabricante">
+                            @for (fabricante of produtoFabricante; track fabricante.idProdutoFabricante) {
+                                <mat-option [value]="fabricante.idProdutoFabricante">
+                                    {{ fabricante.nmProdutoFabricante }}
+                                </mat-option>
+                            }
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+            </mat-tab>
+            <mat-tab label="Dados secundários">
+                <div class="flex flex-col gap-0 pt-8 h-75">
+                    <mat-form-field appearance="outline" class="w-full">
+                        <mat-label>Situação do produto</mat-label>
+                        <mat-select formControlName="idProdutoSituacao">
+                            @for (situacao of produtoSituacao; track situacao.idProdutoSituacao) {
+                                <mat-option [value]="situacao.idProdutoSituacao">
+                                    {{ situacao.nmProdutoSituacao }}
+                                </mat-option>
+                            }
+                        </mat-select>
+                    </mat-form-field>
+                    <mat-form-field appearance="outline" class="w-full">
+                        <mat-label>Cor do Produto</mat-label>
+                        <mat-select formControlName="inProdutoCor">
+                        @for (cor of produtoCores; track cor.id) {
+                            <mat-option [value]="cor.id">
+                                {{ cor.nome }}
+                            </mat-option>
+                        }
+                        </mat-select>
+                    </mat-form-field>
+                    <mat-form-field appearance="outline" class="w-full">
+                        <mat-label>Medida do Produto</mat-label>
+                        <mat-select formControlName="inProdutoMedida">
+                        @for (cor of produtoMedidas; track cor.id) {
+                            <mat-option [value]="cor.id">
+                                {{ cor.nome }}
+                            </mat-option>
+                        }
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+            </mat-tab>
+            <mat-tab label="Imagem">
+                <div class="flex flex-col gap-4 pt-8 h-75 items-center">
+                    @if (produtoImagem) {
+                        <div class="relative w-80 h-40 border rounded-lg overflow-hidden shadow-sm">
+                            <img [src]="apiBase + produtoImagem" alt="Imagem do Produto" class="w-full h-full object-cover">
+                        </div>
+                    } @else {
+                        <div class="w-80 h-40 border-2 border-dashed rounded-lg flex items-center justify-center text-gray-400">
+                            <mat-icon class="text-4xl">image</mat-icon>
+                        </div>
+                    }
+                    <button type="button" mat-stroked-button color="primary" (click)="imagemArquivo.click()">
+                        <mat-icon>cloud_upload</mat-icon> Selecionar imagem
+                    </button>
+                    <input #imagemArquivo name="arquivo" type="file" accept="image/png, image/jpeg, image/webp" (change)="onFileSelected($event)" class="hidden">
+                </div>
+            </mat-tab>
+        </mat-tab-group>
+    </mat-dialog-content>
+    <mat-dialog-actions align="end" class="gap-2 pr-4 pb-4">
+        <button mat-button type="button" (click)="fechar()">Cancelar</button>
+        <button mat-flat-button color="primary" type="submit" [disabled]="formulario.invalid" class="bg-cor-padrao">Salvar</button>
+    </mat-dialog-actions>
+</form>

@@ -1,0 +1,62 @@
+<div class="p-0 m-4">
+    <div class="flex items-center gap-3">
+        <mat-icon style="font-size: 40px; width: 40px; height: 40px;" class="text-gray-700">history</mat-icon>
+        <div class="flex flex-col">
+            <h2 class="text-xl font-bold text-gray-800 leading-tight m-0">Histórico do Produto</h2>
+            <span class="text-sm font-semibold text-gray-600">{{ nomeProduto }}</span>
+        </div>
+    </div>
+</div>
+<form [formGroup]="formulario" (ngSubmit)="salvar()">
+    <mat-dialog-content class="flex flex-col gap-3 pt-2">
+        <mat-form-field appearance="outline" class="w-full">
+            <mat-label>Fornecedor</mat-label>
+            <mat-select formControlName="idFornecedor">
+                @for (fornecedor of fornecedores; track fornecedor.idFornecedor) {
+                    <mat-option [value]="fornecedor.idFornecedor">
+                        {{ fornecedor.nmFornecedor }}
+                    </mat-option>
+                }
+            </mat-select>
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="w-full">
+            <mat-label>Adquirente</mat-label>
+            <mat-select formControlName="idAdquirente">
+                @for (adquirente of adquirentes; track adquirente.idAdquirente) {
+                    <mat-option [value]="adquirente.idAdquirente">
+                        {{ adquirente.nmAdquirente }}
+                    </mat-option>
+                }
+            </mat-select>
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="w-full">
+            <mat-label>Tipo do histórico</mat-label>
+            <mat-select formControlName="inProdutoHistoricoTipo">
+            @for (tipo of tipoHistorico; track tipo.id) {
+                <mat-option [value]="tipo.id">
+                    {{ tipo.nome }}
+                </mat-option>
+            }
+            </mat-select>
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="w-full text-sm">
+            <mat-label>Data do histórico</mat-label>
+            <input matInput [matDatepicker]="picker" formControlName="dtProdutoHistorico">
+            <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="w-full text-sm">
+            <mat-label>Quantidade</mat-label>
+            <input matInput type="number" step="0.01" formControlName="qtProdutoHistorico" placeholder="0,00">
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="w-full text-sm">
+            <mat-label>Valor</mat-label>
+            <span matPrefix class="ms-2 me-1 font-medium text-gray-500">R$&nbsp;</span>
+            <input matInput type="number" step="0.01" formControlName="vlProdutoHistorico" placeholder="0,00">
+        </mat-form-field>
+    </mat-dialog-content>
+    <mat-dialog-actions align="end" class="gap-2 pr-4 pb-4">
+        <button mat-button type="button" (click)="fechar()">Cancelar</button>
+        <button mat-flat-button color="primary" type="submit" [disabled]="formulario.invalid" class="bg-cor-padrao">Salvar</button>
+    </mat-dialog-actions>
+</form>

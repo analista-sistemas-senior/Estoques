@@ -1,0 +1,24 @@
+<h2 mat-dialog-title class="text-lg font-bold">
+    <mat-icon class="me-3 pt-1">people</mat-icon>
+    <span>{{ editando ? 'Adquirente' : 'Novo Adquirente' }}</span>
+</h2>
+<form [formGroup]="formulario" (ngSubmit)="salvar()">
+    <mat-dialog-content class="flex flex-col gap-3 pt-2">
+        <mat-form-field appearance="outline" class="w-full text-sm">
+            <mat-label>Nome</mat-label>
+            <input matInput formControlName="nmAdquirente">
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="w-full text-sm">
+            <mat-label>Endereço</mat-label>
+            <input matInput formControlName="txEndereco">
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="w-full text-sm">
+            <mat-label>Anotações</mat-label>
+            <textarea matInput formControlName="txAnotacao" rows="3"></textarea>
+        </mat-form-field>
+    </mat-dialog-content>
+    <mat-dialog-actions align="end" class="gap-2 pr-4 pb-4">
+        <button mat-button type="button" (click)="fechar()">Cancelar</button>
+        <button mat-flat-button color="primary" type="submit" [disabled]="formulario.invalid" class="bg-cor-padrao">Salvar</button>
+    </mat-dialog-actions>
+</form>

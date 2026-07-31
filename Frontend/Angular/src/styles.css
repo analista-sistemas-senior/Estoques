@@ -1,0 +1,5 @@
+@import 'tailwindcss';
+
+.bg-cor-padrao {
+    background: #1269db;
+}

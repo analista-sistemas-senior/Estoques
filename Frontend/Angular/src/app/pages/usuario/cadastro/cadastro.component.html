@@ -1,0 +1,94 @@
+<div class="grid grid-cols-1 md:grid-cols-2 min-h-screen bg-slate-50 relative">
+    @if (carregando()) {
+        <div class="absolute top-0 left-0 right-0 w-full z-50 h-1 pointer-events-none">
+            <mat-progress-bar mode="indeterminate" class="w-full"></mat-progress-bar>
+        </div>
+    }
+    <div class="hidden md:flex flex-col items-center justify-center p-12 text-white bg-cor-padrao">
+        <div class="text-center max-w-md">
+            <mat-icon style="transform: scale(3.5); height: 48px; width: 48px; line-height: 48px;" class="mb-10 block mx-auto">storage</mat-icon>
+            <h1 class="text-5xl font-bold mb-4 tracking-tight">Estoques</h1>
+            <p class="text-lg">Gerenciamento de estoques</p>
+        </div>
+    </div>
+    <div class="flex items-center justify-center p-8 text-slate-900">
+        <div class="w-full max-w-sm">
+            <div class="text-center mb-12 md:hidden">
+                <mat-icon color="primary" style="transform: scale(2); height: 24px; width: 24px;" class="mb-4">storage</mat-icon>
+                <h2 class="text-3xl font-bold tracking-tight">Estoques</h2>
+            </div>
+            <div class="mb-6">
+                <h3 class="text-2xl font-semibold tracking-tight mb-1">Cadastro</h3>
+                <p class="text-sm text-slate-500">Insira seus dados para cadastrar-se no sistema</p>
+            </div>
+            <form [formGroup]="usuarioCadastroFormulario" (ngSubmit)="onSubmit()" class="flex flex-col gap-2">
+                <mat-form-field appearance="outline" class="w-full">
+                    <mat-label>Nome</mat-label>
+                    <input #nmUsuario matInput id="nmUsuario" formControlName="nmUsuario" placeholder="Digite seu nome" [readonly]="carregando()">
+                    @if (usuarioCadastroFormulario.get('nmUsuario')?.hasError('required')) {
+                        <mat-error>Campo obrigatório</mat-error>
+                    }
+                    @if (usuarioCadastroFormulario.get('nmUsuario')?.hasError('minlength')) {
+                        <mat-error>Campo deve ter mais caracteres</mat-error>
+                    }
+                    @if (usuarioCadastroFormulario.get('nmUsuario')?.hasError('maxlength')) {
+                        <mat-error>Campo deve ter menos caracteres</mat-error>
+                    }
+                </mat-form-field>
+                <mat-form-field appearance="outline" class="w-full">
+                    <mat-label>Usuário</mat-label>
+                    <input matInput id="nmLogin" formControlName="nmLogin" placeholder="Digite seu login" [readonly]="carregando()">
+                    @if (usuarioCadastroFormulario.get('nmLogin')?.hasError('required')) {
+                        <mat-error>Campo obrigatório</mat-error>
+                    }
+                    @if (usuarioCadastroFormulario.get('nmLogin')?.hasError('minlength')) {
+                        <mat-error>Campo deve ter mais caracteres</mat-error>
+                    }
+                    @if (usuarioCadastroFormulario.get('nmLogin')?.hasError('maxlength')) {
+                        <mat-error>Campo deve ter menos caracteres</mat-error>
+                    }
+                </mat-form-field>
+                <mat-form-field appearance="outline" class="w-full">
+                    <mat-label>Senha</mat-label>
+                    <input matInput id="cdSenha" type="password" formControlName="cdSenha" placeholder="Digite sua senha" [readonly]="carregando()">
+                    @if (usuarioCadastroFormulario.get('cdSenha')?.hasError('required')) {
+                        <mat-error>Campo obrigatório</mat-error>
+                    }
+                    @if (usuarioCadastroFormulario.get('cdSenha')?.hasError('minlength')) {
+                        <mat-error>Campo deve ter mais caracteres</mat-error>
+                    }
+                    @if (usuarioCadastroFormulario.get('cdSenha')?.hasError('maxlength')) {
+                        <mat-error>Campo deve ter menos caracteres</mat-error>
+                    }
+                </mat-form-field>
+                <mat-form-field appearance="outline" class="w-full">
+                    <mat-label>Repita a senha</mat-label>
+                    <input matInput id="cdSenhaConfirmacao" type="password" formControlName="cdSenhaConfirmacao" placeholder="Redigite sua senha" [readonly]="carregando()">
+                    @if (usuarioCadastroFormulario.get('cdSenhaConfirmacao')?.hasError('required')) {
+                        <mat-error>Campo obrigatório</mat-error>
+                    }
+                    @if (usuarioCadastroFormulario.get('cdSenhaConfirmacao')?.hasError('minlength')) {
+                        <mat-error>Campo deve ter mais caracteres</mat-error>
+                    }
+                    @if (usuarioCadastroFormulario.get('cdSenhaConfirmacao')?.hasError('maxlength')) {
+                        <mat-error>Campo deve ter menos caracteres</mat-error>
+                    }
+                    @if (usuarioCadastroFormulario.get('cdSenhaConfirmacao')?.hasError('senhasDiferentes')) {
+                        <mat-error>As senhas não coincidem</mat-error>
+                    }
+                </mat-form-field>
+                <div class="mb-4 text-sm text-slate-500">
+                    <a routerLink="/login">Já possui cadastro? Clique aqui para fazer login</a>
+                </div>
+                <button mat-raised-button color="primary" type="submit" [disabled]="usuarioCadastroFormulario.invalid || carregando()" class="w-full py-6 text-base font-semibold mt-2 relative">
+                    @if (!carregando()) {
+                        <span>Cadastrar</span>
+                    }
+                    @if (carregando()) {
+                        <span>Cadastrando...</span>
+                    }
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
