@@ -37,5 +37,8 @@ namespace Estoques.Domain.Entities
             INProdutoMedida = inProdutoMedida;
             LKProdutoImagem = lkProdutoImagem;
         }
+        public void AtribuirQuantidade(decimal qtProduto) {
+            QTProduto = qtProduto;
+        }
     }
 }
