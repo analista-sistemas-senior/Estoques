@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, inject } from '@angular/core';
+import { Component, OnInit, ViewChild, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
@@ -12,6 +12,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { AdquirenteModalComponent } from './adquirente-modal/adquirente-modal.component';
 import { DialogoConfirmacaoComponent } from '../../shared/components/dialogo-confirmacao.component';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
 
 export interface Adquirente {
     idAdquirente: number;
@@ -22,7 +23,7 @@ export interface Adquirente {
 
 @Component({
     selector: 'app-adquirente',
-    imports: [CommonModule, MatTableModule, MatPaginatorModule, MatSortModule, MatButtonModule, MatIconModule, MatInputModule, MatFormFieldModule, MatSnackBarModule],
+    imports: [CommonModule, MatTableModule, MatPaginatorModule, MatSortModule, MatButtonModule, MatIconModule, MatInputModule, MatFormFieldModule, MatSnackBarModule, MatProgressBarModule],
     templateUrl: './adquirente.component.html'
 })
 
@@ -32,6 +33,7 @@ export class AdquirenteComponent implements OnInit {
     private readonly snackBar = inject(MatSnackBar);
     dataSource = new MatTableDataSource<Adquirente>([]);
     displayedColumns: string[] = ['nmAdquirente', 'txEndereco', 'txAnotacao', 'acoes'];
+    abrindo = signal<boolean>(false);
 
     @ViewChild(MatPaginator) paginacao!: MatPaginator;
     @ViewChild(MatSort) ordenacao!: MatSort;
@@ -41,14 +43,17 @@ export class AdquirenteComponent implements OnInit {
     }
 
     carregarAdquirentes(): void {
+        this.abrindo.set(true);
         this.adquirenteService.listar().subscribe({
             next: (dados) => {
                 this.dataSource.data = dados;
                 this.dataSource.paginator = this.paginacao;
                 this.dataSource.sort = this.ordenacao;
+                this.abrindo.set(false);
             },
             error: (erro) => {
                 this.snackBar.open(`Erro ao carregar adquirentes: ${erro}`, 'OK', { duration: 3000, horizontalPosition: 'center', verticalPosition: 'top' });
+                this.abrindo.set(false);
                 console.error('Erro ao carregar adquirentes: ', erro);
             }
         });
@@ -91,11 +96,15 @@ export class AdquirenteComponent implements OnInit {
         });
         dialogRef.afterClosed().subscribe((confirmado: boolean) => {
             if (confirmado) {
+                this.abrindo.set(true);
                 this.adquirenteService.excluir(id).subscribe({
-                    next: () => this.carregarAdquirentes(),
+                    next: () => {
+                        this.carregarAdquirentes(),
+                        this.abrindo.set(false);
+                    },
                     error: (erro) => {
                         this.snackBar.open(`Não excluído: ${erro}`, 'OK', { duration: 3000, horizontalPosition: 'center', verticalPosition: 'top' });
-                        console.error('Não excluído: ', erro)
+                        console.error('Não excluído: ', erro);
                     }
                 });
             }

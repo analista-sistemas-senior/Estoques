@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, inject } from '@angular/core';
+import { Component, OnInit, ViewChild, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
@@ -15,6 +15,7 @@ import { environment } from '../../../environments/environment';
 import { ProdutoCor } from '../../shared/enums/produto-cor.enum';
 import { ProdutoMedida } from '../../shared/enums/produto-medida.enum';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
 
 export interface Produto {
     idProduto: number;
@@ -30,7 +31,7 @@ export interface Produto {
 
 @Component({
     selector: 'app-produto',
-    imports: [CommonModule, MatTableModule, MatPaginatorModule, MatSortModule, MatButtonModule, MatIconModule, MatInputModule, MatFormFieldModule, MatSnackBarModule],
+    imports: [CommonModule, MatTableModule, MatPaginatorModule, MatSortModule, MatButtonModule, MatIconModule, MatInputModule, MatFormFieldModule, MatSnackBarModule, MatProgressBarModule],
     templateUrl: './produto.component.html'
 })
 
@@ -41,6 +42,7 @@ export class ProdutoComponent implements OnInit {
     dataSource = new MatTableDataSource<Produto>([]);
     displayedColumns: string[] = ['lkProdutoImagem', 'nmProduto', 'dsProduto', 'produtoTipo', 'produtoFabricante', 'inProdutoCor', 'inProdutoMedida', 'acoes'];
     apiBase = environment.apiUrlBase;
+    abrindo = signal<boolean>(false);
 
     @ViewChild(MatPaginator) paginacao!: MatPaginator;
     @ViewChild(MatSort) ordenacao!: MatSort;
@@ -55,12 +57,15 @@ export class ProdutoComponent implements OnInit {
     }
 
     carregarProdutos(): void {
+        this.abrindo.set(true);
         this.produtoService.listar().subscribe({
             next: (dados) => {
                 this.dataSource.data = dados;
+                this.abrindo.set(false);
             },
             error: (erro) => {
                 this.snackBar.open(`Erro ao carregar produtos: ${erro}`, 'OK', { duration: 3000, horizontalPosition: 'center', verticalPosition: 'top' });
+                this.abrindo.set(false);
                 console.error('Erro ao carregar produtos: ', erro);
             }
         });
@@ -103,8 +108,12 @@ export class ProdutoComponent implements OnInit {
         });
         dialogRef.afterClosed().subscribe((confirmado: boolean) => {
             if (confirmado) {
+                this.abrindo.set(true);
                 this.produtoService.excluir(id).subscribe({
-                    next: () => this.carregarProdutos(),
+                    next: () => {
+                        this.carregarProdutos(),
+                        this.abrindo.set(false);
+                    },
                     error: (erro) => {
                         this.snackBar.open(`Não excluído: ${erro}`, 'OK', { duration: 3000, horizontalPosition: 'center', verticalPosition: 'top' });
                         console.error('Não excluído: ', erro);

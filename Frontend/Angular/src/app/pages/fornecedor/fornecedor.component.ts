@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, inject } from '@angular/core';
+import { Component, OnInit, ViewChild, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
@@ -12,6 +12,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { FornecedorModalComponent } from './fornecedor-modal/fornecedor-modal.component';
 import { DialogoConfirmacaoComponent } from '../../shared/components/dialogo-confirmacao.component';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
 
 export interface Fornecedor {
     idFornecedor: number;
@@ -22,7 +23,7 @@ export interface Fornecedor {
 
 @Component({
     selector: 'app-fornecedores',
-    imports: [CommonModule, MatTableModule, MatPaginatorModule, MatSortModule, MatButtonModule, MatIconModule, MatInputModule, MatFormFieldModule, MatSnackBarModule],
+    imports: [CommonModule, MatTableModule, MatPaginatorModule, MatSortModule, MatButtonModule, MatIconModule, MatInputModule, MatFormFieldModule, MatSnackBarModule, MatProgressBarModule],
     templateUrl: './fornecedor.component.html'
 })
 
@@ -32,6 +33,7 @@ export class FornecedorComponent implements OnInit {
     private readonly snackBar = inject(MatSnackBar);
     dataSource = new MatTableDataSource<Fornecedor>([]);
     displayedColumns: string[] = ['nmFornecedor', 'txEndereco', 'txAnotacao', 'acoes'];
+    abrindo = signal<boolean>(false);
 
     @ViewChild(MatPaginator) paginacao!: MatPaginator;
     @ViewChild(MatSort) ordenacao!: MatSort;
@@ -41,14 +43,17 @@ export class FornecedorComponent implements OnInit {
     }
 
     carregarFornecedores(): void {
+        this.abrindo.set(true);
         this.fornecedorService.listar().subscribe({
             next: (dados) => {
                 this.dataSource.data = dados;
                 this.dataSource.paginator = this.paginacao;
                 this.dataSource.sort = this.ordenacao;
+                this.abrindo.set(false);
             },
             error: (erro) => {
                 this.snackBar.open(`Erro ao carregar fornecedores: ${erro}`, 'OK', { duration: 3000, horizontalPosition: 'center', verticalPosition: 'top' });
+                this.abrindo.set(false);
                 console.error('Erro ao carregar fornecedores: ', erro);
             }
         });
@@ -91,8 +96,12 @@ export class FornecedorComponent implements OnInit {
         });
         dialogRef.afterClosed().subscribe((confirmado: boolean) => {
             if (confirmado) {
+                this.abrindo.set(true);
                 this.fornecedorService.excluir(id).subscribe({
-                    next: () => this.carregarFornecedores(),
+                    next: () => {
+                        this.carregarFornecedores(),
+                        this.abrindo.set(false);
+                    },
                     error: (erro) => {
                         this.snackBar.open(`Não excluído: ${erro}`, 'OK', { duration: 3000, horizontalPosition: 'center', verticalPosition: 'top' });
                         console.error('Não excluído: ', erro);

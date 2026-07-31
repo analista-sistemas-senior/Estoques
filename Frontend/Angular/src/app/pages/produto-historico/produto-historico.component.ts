@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, inject } from '@angular/core';
+import { Component, OnInit, ViewChild, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
@@ -17,6 +17,7 @@ import { ProdutoCor } from '../../shared/enums/produto-cor.enum';
 import { ProdutoMedida } from '../../shared/enums/produto-medida.enum';
 import { ProdutoHistorico } from '../../shared/enums/produto-historico.enum';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
 
 export interface Produto {
     idProduto: number;
@@ -43,7 +44,7 @@ export interface ProdutoHistoricoItem {
 
 @Component({
     selector: 'app-produto-historico',
-    imports: [CommonModule, MatTableModule, MatPaginatorModule, MatSortModule, MatButtonModule, MatIconModule, MatInputModule, MatFormFieldModule, MatSnackBarModule],
+    imports: [CommonModule, MatTableModule, MatPaginatorModule, MatSortModule, MatButtonModule, MatIconModule, MatInputModule, MatFormFieldModule, MatSnackBarModule, MatProgressBarModule],
     templateUrl: './produto-historico.component.html',
     styleUrl: './produto-historico.component.css'
 })
@@ -56,8 +57,9 @@ export class ProdutoHistoricoComponent implements OnInit {
     dataSource = new MatTableDataSource<Produto>([]);
     displayedColumns: string[] = ['expandir','lkProdutoImagem', 'nmProduto', 'dsProduto', 'produtoTipo', 'produtoFabricante', 'inProdutoCor', 'qtProduto', 'inProdutoMedida', 'acoes'];
     apiBase = environment.apiUrlBase;
-    elementoExpandido: number | null = null;
+    elementoExpandido = signal<number | null>(null);
     tipoHistorico = Object.keys(ProdutoHistorico).filter((key) => isNaN(Number(key))).map((key) => ({ id: ProdutoHistorico[key as keyof typeof ProdutoHistorico], nome: key }));
+    abrindo = signal<boolean>(false);
 
     @ViewChild(MatPaginator) paginacao!: MatPaginator;
     @ViewChild(MatSort) ordenacao!: MatSort;
@@ -72,13 +74,16 @@ export class ProdutoHistoricoComponent implements OnInit {
     }
 
     carregarProdutos(): void {
+        this.abrindo.set(true);
         this.produtoService.listar().subscribe({
             next: (dados) => {
                 this.dataSource.data = dados;
+                this.abrindo.set(false);
             },
             error: (erro) => {
                 this.snackBar.open(`Erro ao carregar produtos: ${erro}`, 'OK', { duration: 3000, horizontalPosition: 'center', verticalPosition: 'top' });
                 console.error('Erro ao carregar produtos: ', erro);
+                this.abrindo.set(false);
             }
         });
     }
@@ -114,7 +119,7 @@ export class ProdutoHistoricoComponent implements OnInit {
                         }
                     });
                 }
-                this.elementoExpandido = null;
+                this.elementoExpandido.set(null);
             }
         });
     }
@@ -125,11 +130,16 @@ export class ProdutoHistoricoComponent implements OnInit {
         });
         dialogRef.afterClosed().subscribe((confirmado: boolean) => {
             if (confirmado) {
+                this.abrindo.set(true);
                 this.produtoHistoricoService.excluir(id).subscribe({
-                    next: () => this.carregarProdutos(),
+                    next: () => {
+                        this.elementoExpandido.set(null);
+                        this.carregarProdutos();
+                        this.abrindo.set(false);
+                    },
                     error: (erro) => {
                         this.snackBar.open(`Não excluído: ${erro}`, 'OK', { duration: 3000, horizontalPosition: 'center', verticalPosition: 'top' });
-                        console.error('Não excluído: ', erro)
+                        console.error('Não excluído: ', erro);
                     }
                 });
             }
@@ -145,20 +155,27 @@ export class ProdutoHistoricoComponent implements OnInit {
     }
 
     toggleRow(elemento: Produto) {
-        if (this.elementoExpandido == elemento.idProduto) {
-            this.elementoExpandido = null;
+        if (this.abrindo() == true) return;
+
+        if (this.elementoExpandido() == elemento.idProduto) {
+            this.elementoExpandido.set(null);
+            this.abrindo.set(false);
             return;
         }
+
+        this.abrindo.set(true);
 
         this.produtoHistoricoService.listarPorProduto(elemento.idProduto).subscribe({
             next: (dadosHistorico) => {
                 elemento.produtoHistorico = dadosHistorico;
-                this.elementoExpandido = elemento.idProduto;
+                this.elementoExpandido.set(elemento.idProduto);
                 this.dataSource.data = [...this.dataSource.data];
+                this.abrindo.set(false);
             },
             error: (erro) => {
                 this.snackBar.open(`Erro ao buscar histórico: ${erro}`, 'OK', { duration: 3000, horizontalPosition: 'center', verticalPosition: 'top' });
                 console.error('Erro ao buscar histórico', erro);
+                this.abrindo.set(false);
             }
         });
     }

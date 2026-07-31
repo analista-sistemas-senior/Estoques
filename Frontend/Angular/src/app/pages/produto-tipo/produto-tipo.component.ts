@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, inject } from '@angular/core';
+import { Component, OnInit, ViewChild, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
@@ -12,6 +12,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { ProdutoTipoModalComponent } from './produto-tipo-modal/produto-tipo-modal.component';
 import { DialogoConfirmacaoComponent } from '../../shared/components/dialogo-confirmacao.component';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
 
 export interface ProdutoTipo {
     idProdutoTipo: number;
@@ -20,7 +21,7 @@ export interface ProdutoTipo {
 
 @Component({
     selector: 'app-produto-tipo',
-    imports: [CommonModule, MatTableModule, MatPaginatorModule, MatSortModule, MatButtonModule, MatIconModule, MatInputModule, MatFormFieldModule, MatSnackBarModule],
+    imports: [CommonModule, MatTableModule, MatPaginatorModule, MatSortModule, MatButtonModule, MatIconModule, MatInputModule, MatFormFieldModule, MatSnackBarModule, MatProgressBarModule],
     templateUrl: './produto-tipo.component.html'
 })
 
@@ -30,6 +31,7 @@ export class ProdutoTipoComponent implements OnInit {
     private readonly snackBar = inject(MatSnackBar);
     dataSource = new MatTableDataSource<ProdutoTipo>([]);
     displayedColumns: string[] = ['nmProdutoTipo', 'acoes'];
+    abrindo = signal<boolean>(false);
 
     @ViewChild(MatPaginator) paginacao!: MatPaginator;
     @ViewChild(MatSort) ordenacao!: MatSort;
@@ -39,14 +41,17 @@ export class ProdutoTipoComponent implements OnInit {
     }
 
     carregarProdutoTipoes(): void {
+        this.abrindo.set(true);
         this.produtoTipoService.listar().subscribe({
             next: (dados) => {
                 this.dataSource.data = dados;
                 this.dataSource.paginator = this.paginacao;
                 this.dataSource.sort = this.ordenacao;
+                this.abrindo.set(false);
             },
             error: (erro) => {
                 this.snackBar.open(`Erro ao carregar tipos: ${erro}`, 'OK', { duration: 3000, horizontalPosition: 'center', verticalPosition: 'top' });
+                this.abrindo.set(false);
                 console.error('Erro ao carregar tipos: ', erro);
             }
         });
@@ -88,9 +93,14 @@ export class ProdutoTipoComponent implements OnInit {
             width: '400px', data: {}
         });
         dialogRef.afterClosed().subscribe((confirmado: boolean) => {
+            this.abrindo.set(true);
             if (confirmado) {
+                this.abrindo.set(true);
                 this.produtoTipoService.excluir(id).subscribe({
-                    next: () => this.carregarProdutoTipoes(),
+                    next: () => {
+                        this.carregarProdutoTipoes(),
+                        this.abrindo.set(false);
+                    },
                     error: (erro) => {
                         this.snackBar.open(`Não excluído: ${erro}`, 'OK', { duration: 3000, horizontalPosition: 'center', verticalPosition: 'top' });
                         console.error('Não excluído: ', erro);

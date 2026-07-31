@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, inject } from '@angular/core';
+import { Component, OnInit, ViewChild, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
@@ -12,6 +12,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { ProdutoSituacaoModalComponent } from './produto-situacao-modal/produto-situacao-modal.component';
 import { DialogoConfirmacaoComponent } from '../../shared/components/dialogo-confirmacao.component';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
 
 export interface ProdutoSituacao {
     idProdutoSituacao: number;
@@ -20,7 +21,7 @@ export interface ProdutoSituacao {
 
 @Component({
     selector: 'app-produto-situacao',
-    imports: [CommonModule, MatTableModule, MatPaginatorModule, MatSortModule, MatButtonModule, MatIconModule, MatInputModule, MatFormFieldModule, MatSnackBarModule],
+    imports: [CommonModule, MatTableModule, MatPaginatorModule, MatSortModule, MatButtonModule, MatIconModule, MatInputModule, MatFormFieldModule, MatSnackBarModule, MatProgressBarModule],
     templateUrl: './produto-situacao.component.html'
 })
 
@@ -30,6 +31,7 @@ export class ProdutoSituacaoComponent implements OnInit {
     private readonly snackBar = inject(MatSnackBar);
     dataSource = new MatTableDataSource<ProdutoSituacao>([]);
     displayedColumns: string[] = ['nmProdutoSituacao', 'acoes'];
+    abrindo = signal<boolean>(false);
 
     @ViewChild(MatPaginator) paginacao!: MatPaginator;
     @ViewChild(MatSort) ordenacao!: MatSort;
@@ -39,14 +41,17 @@ export class ProdutoSituacaoComponent implements OnInit {
     }
 
     carregarProdutoSituacaoes(): void {
+        this.abrindo.set(true);
         this.produtoSituacaoService.listar().subscribe({
             next: (dados) => {
                 this.dataSource.data = dados;
                 this.dataSource.paginator = this.paginacao;
                 this.dataSource.sort = this.ordenacao;
+                this.abrindo.set(false);
             },
             error: (erro) => {
                 this.snackBar.open(`Erro ao carregar situacaos: ${erro}`, 'OK', { duration: 3000, horizontalPosition: 'center', verticalPosition: 'top' });
+                this.abrindo.set(false);
                 console.error('Erro ao carregar situacaos: ', erro);
             }
         });
@@ -89,8 +94,12 @@ export class ProdutoSituacaoComponent implements OnInit {
         });
         dialogRef.afterClosed().subscribe((confirmado: boolean) => {
             if (confirmado) {
+                this.abrindo.set(true);
                 this.produtoSituacaoService.excluir(id).subscribe({
-                    next: () => this.carregarProdutoSituacaoes(),
+                    next: () => {
+                        this.carregarProdutoSituacaoes(),
+                        this.abrindo.set(false);
+                    },
                     error: (erro) => {
                         this.snackBar.open(`Não excluído: ${erro}`, 'OK', { duration: 3000, horizontalPosition: 'center', verticalPosition: 'top' });
                         console.error('Não excluído: ', erro);

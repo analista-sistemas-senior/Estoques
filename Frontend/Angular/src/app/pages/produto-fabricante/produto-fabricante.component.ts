@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, inject } from '@angular/core';
+import { Component, OnInit, ViewChild, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
@@ -12,6 +12,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { ProdutoFabricanteModalComponent } from './produto-fabricante-modal/produto-fabricante-modal.component';
 import { DialogoConfirmacaoComponent } from '../../shared/components/dialogo-confirmacao.component';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
 
 export interface ProdutoFabricante {
     idProdutoFabricante: number;
@@ -20,7 +21,7 @@ export interface ProdutoFabricante {
 
 @Component({
   selector: 'app-produto-fabricante',
-  imports: [CommonModule, MatTableModule, MatPaginatorModule, MatSortModule, MatButtonModule, MatIconModule, MatInputModule, MatFormFieldModule, MatSnackBarModule],
+  imports: [CommonModule, MatTableModule, MatPaginatorModule, MatSortModule, MatButtonModule, MatIconModule, MatInputModule, MatFormFieldModule, MatSnackBarModule, MatProgressBarModule],
   templateUrl: './produto-fabricante.component.html'
 })
 
@@ -30,6 +31,7 @@ export class ProdutoFabricanteComponent implements OnInit {
     private readonly snackBar = inject(MatSnackBar);
     dataSource = new MatTableDataSource<ProdutoFabricante>([]);
     displayedColumns: string[] = ['nmProdutoFabricante', 'acoes'];
+    abrindo = signal<boolean>(false);
 
     @ViewChild(MatPaginator) paginacao!: MatPaginator;
     @ViewChild(MatSort) ordenacao!: MatSort;
@@ -39,14 +41,17 @@ export class ProdutoFabricanteComponent implements OnInit {
     }
 
     carregarProdutoFabricantes(): void {
+        this.abrindo.set(true);
         this.produtoFabricanteService.listar().subscribe({
             next: (dados) => {
                 this.dataSource.data = dados;
                 this.dataSource.paginator = this.paginacao;
                 this.dataSource.sort = this.ordenacao;
+                this.abrindo.set(false);
             },
             error: (erro) => {
                 this.snackBar.open(`Erro ao carregar fabricantes: ${erro}`, 'OK', { duration: 3000, horizontalPosition: 'center', verticalPosition: 'top' });
+                this.abrindo.set(false);
                 console.error('Erro ao carregar fabricantes: ', erro);
             }
         });
@@ -89,8 +94,12 @@ export class ProdutoFabricanteComponent implements OnInit {
         });
         dialogRef.afterClosed().subscribe((confirmado: boolean) => {
             if (confirmado) {
+                this.abrindo.set(true);
                 this.produtoFabricanteService.excluir(id).subscribe({
-                    next: () => this.carregarProdutoFabricantes(),
+                    next: () => {
+                        this.carregarProdutoFabricantes(),
+                        this.abrindo.set(false);
+                    },
                     error: (erro) => {
                         this.snackBar.open(`Não excluído: ${erro}`, 'OK', { duration: 3000, horizontalPosition: 'center', verticalPosition: 'top' });
                         console.error('Não excluído: ', erro);
