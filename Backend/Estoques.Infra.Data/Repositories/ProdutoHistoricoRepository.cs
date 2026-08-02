@@ -21,7 +21,7 @@ namespace Estoques.Infra.Data.Repositories
 
         public async Task<List<ProdutoHistorico>> RetornarProdutosHistoricosPorIdUsuario(int idUsuario)
         {
-            return await _context.ProdutoHistorico.AsNoTracking().Include(ph => ph.Produto).Include(ph => ph.Fornecedor).Include(ph => ph.Adquirente).Where(ph => ph.Produto.IDUsuario == idUsuario).ToListAsync();
+            return await _context.ProdutoHistorico.AsNoTracking().Include(ph => ph.Produto).ThenInclude(p => p.ProdutoTipo).Include(ph => ph.Produto).ThenInclude(p => p.ProdutoFabricante).Include(ph => ph.Fornecedor).Include(ph => ph.Adquirente).Where(ph => ph.Produto.IDUsuario == idUsuario).ToListAsync();
         }
 
         public async Task<List<ProdutoHistorico>> RetornarProdutosHistoricosPorIdProdutoEIdUsuario(int idProduto, int idUsuario)

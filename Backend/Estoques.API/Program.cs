@@ -69,6 +69,7 @@ builder.Services.AddScoped<IProdutoSituacaoService, ProdutoSituacaoService>();
 builder.Services.AddScoped<IProdutoTipoService, ProdutoTipoService>();
 builder.Services.AddScoped<IUsuarioService, UsuarioService>();
 builder.Services.AddScoped<IArmazenamentoService, ArmazenamentoService>();
+builder.Services.AddScoped<IRelatorioService, RelatorioService>();
 
 builder.Services.AddScoped<IValidator<AutenticacaoEntradaDTO>, AutenticacaoEntradaDTOValidator>();
 builder.Services.AddScoped<IValidator<AdquirenteDTO>, AdquirenteDTOValidator>();

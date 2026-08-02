@@ -302,3 +302,32 @@ Authorization: Bearer {{login.response.body.$.cdToken}}
 DELETE {{Estoques.API_HostAddress}}/api/produtos/historicos/3
 Content-Type: application/json
 Authorization: Bearer {{login.response.body.$.cdToken}}
+
+
+
+### RELATÓRIOS ====================================================
+
+### Totais
+GET {{Estoques.API_HostAddress}}/api/relatorios/totais
+Content-Type: application/json
+Authorization: Bearer {{login.response.body.$.cdToken}}
+
+### Produto por tipo
+GET {{Estoques.API_HostAddress}}/api/relatorios/produtos/tipos
+Content-Type: application/json
+Authorization: Bearer {{login.response.body.$.cdToken}}
+
+### Produto por fabricante
+GET {{Estoques.API_HostAddress}}/api/relatorios/produtos/fabricantes
+Content-Type: application/json
+Authorization: Bearer {{login.response.body.$.cdToken}}
+
+### Produto por fornecedor
+GET {{Estoques.API_HostAddress}}/api/relatorios/produtos/fornecedores
+Content-Type: application/json
+Authorization: Bearer {{login.response.body.$.cdToken}}
+
+### Produto por cores
+GET {{Estoques.API_HostAddress}}/api/relatorios/produtos/cores
+Content-Type: application/json
+Authorization: Bearer {{login.response.body.$.cdToken}}
