@@ -102,8 +102,12 @@
                                             <td mat-cell *matCellDef="let historico" class="text-sm"> {{ historico.qtProdutoHistorico ?? '-' }} </td>
                                         </ng-container>
                                         <ng-container matColumnDef="valor">
-                                            <th mat-header-cell *matHeaderCellDef class="pl-0! text-xs">Valor</th>
+                                            <th mat-header-cell *matHeaderCellDef class="pl-0! text-xs">Valor unitário</th>
                                             <td mat-cell *matCellDef="let historico" class="text-sm">R$ {{ historico.vlProdutoHistorico ?? '-' }} </td>
+                                        </ng-container>
+                                        <ng-container matColumnDef="valorTotal">
+                                            <th mat-header-cell *matHeaderCellDef class="pl-0! text-xs">Valor total</th>
+                                            <td mat-cell *matCellDef="let historico" class="text-sm">R$ {{ historico.vlProdutoHistorico * historico.qtProdutoHistorico }} </td>
                                         </ng-container>
                                         <ng-container matColumnDef="acao">
                                             <th mat-header-cell *matHeaderCellDef class="pl-0! text-xs">Ações</th>
@@ -112,8 +116,8 @@
                                                 <button mat-icon-button class="scale-80" color="warn" (click)="excluir(historico.idProdutoHistorico)" title="Excluir"><mat-icon>delete</mat-icon></button>
                                             </td>
                                         </ng-container>
-                                        <tr mat-header-row *matHeaderRowDef="['data', 'tipo', 'fornecedor', 'adquirente', 'quantidade', 'valor', 'acao']"></tr>
-                                        <tr mat-row *matRowDef="let histRow; columns: ['data', 'tipo', 'fornecedor', 'adquirente', 'quantidade', 'valor', 'acao'];"></tr>
+                                        <tr mat-header-row *matHeaderRowDef="['data', 'tipo', 'fornecedor', 'adquirente', 'quantidade', 'valor', 'valorTotal', 'acao']"></tr>
+                                        <tr mat-row *matRowDef="let histRow; columns: ['data', 'tipo', 'fornecedor', 'adquirente', 'quantidade', 'valor', 'valorTotal', 'acao'];"></tr>
                                     </table>
                                 }
                             </div>

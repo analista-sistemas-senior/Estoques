@@ -1,0 +1,15 @@
+mat-card-title {
+  font-size: 0.875rem !important;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+mat-card-title mat-icon {
+  font-size: 1.25rem;
+  width: 1.25rem;
+  height: 1.25rem;
+}
+mat-card {
+    background: rgb(252, 252, 252);
+}

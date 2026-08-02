@@ -2,7 +2,7 @@ import { HttpInterceptorFn, HttpErrorResponse } from '@angular/common/http';
 import { inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { catchError, throwError } from 'rxjs';
+import { catchError, EMPTY, throwError } from 'rxjs';
 
 export const autenticacaoInterceptor: HttpInterceptorFn = (requisicao, next) => {
     const router = inject(Router);
@@ -18,6 +18,7 @@ export const autenticacaoInterceptor: HttpInterceptorFn = (requisicao, next) => 
                 if (typeof window !== 'undefined') localStorage.removeItem('usuario_token');
                 snackBar.open('Sua sessão expirou. Faça login novamente.', 'OK', { duration: 3000, horizontalPosition: 'center', verticalPosition: 'top' });
                 router.navigate(['/login']);
+                return EMPTY;
             }
             return throwError(() => error);
         })
