@@ -15,6 +15,7 @@ export const routes: Routes = [
             { path: 'adquirente', loadComponent: () => import('./pages/adquirente/adquirente.component').then(m => m.AdquirenteComponent) },
             { path: 'fornecedor', loadComponent: () => import('./pages/fornecedor/fornecedor.component').then(m => m.FornecedorComponent) },
             { path: 'usuario/perfil', loadComponent: () => import('./pages/usuario/perfil/perfil.component').then(m => m.UsuarioPerfilComponent) },
+            { path: 'termos-privacidade', loadComponent: () => import('./pages/termos-privacidade/termos-privacidade.component').then(m => m.TermosPrivacidadeComponent) },
             { path: '', redirectTo: 'dashboard',  pathMatch: 'full' }
         ]
     },

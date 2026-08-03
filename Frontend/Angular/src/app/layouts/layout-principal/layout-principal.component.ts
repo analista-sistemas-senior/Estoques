@@ -13,6 +13,8 @@ export class LayoutPrincipalComponent {
     private readonly autenticacaoService = inject(AutenticacaoService);
     private readonly router = inject(Router);
     readonly usuario = this.autenticacaoService.usuarioDados;
+    readonly anoAtual = new Date().getFullYear();
+    readonly versao = "1.0.0";
     menuAberto = signal<boolean>(false);
 
     alternarMenu(): void {
