@@ -19,9 +19,6 @@ namespace Estoques.Service.Services
             decimal qtTotalVendido = 0;
             decimal vlTotalVendido = 0;
 
-            var produtos = await _produtoRepository.RetornarProdutosPorIdUsuario(idUsuario);
-            if (produtos != null) qtTotalProduto = produtos.Sum(p => p.QTProduto ?? 0);
-
             var produtosHistoricos = await _produtoHistoricoRepository.RetornarProdutosHistoricosPorIdUsuario(idUsuario);
             if (produtosHistoricos != null)
             {
@@ -29,10 +26,20 @@ namespace Estoques.Service.Services
                 {
                     if (historico.INProdutoHistoricoTipo == Domain.Enums.ProdutoHistoricoTipo.Compra)
                     {
-                        vlTotalProduto += historico.QTProdutoHistorico * historico.VLProdutoHistorico;
                         qtTotalComprado += historico.QTProdutoHistorico;
+                        vlTotalComprado += historico.QTProdutoHistorico * historico.VLProdutoHistorico;
+
+                        qtTotalProduto += historico.QTProdutoHistorico;
+                        vlTotalProduto += historico.QTProdutoHistorico * historico.VLProdutoHistorico;
                     }
-                    else qtTotalVendido += historico.QTProdutoHistorico;
+                    else
+                    {
+                        qtTotalVendido += historico.QTProdutoHistorico;
+                        vlTotalVendido += historico.QTProdutoHistorico * historico.VLProdutoHistorico;
+
+                        qtTotalProduto -= historico.QTProdutoHistorico;
+                        vlTotalProduto -= historico.QTProdutoHistorico * historico.VLProdutoHistorico;
+                    }
                 }
             }
 
