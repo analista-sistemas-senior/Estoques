@@ -127,7 +127,7 @@ dotnet run --project Estoques.API
 
 6 - Rodar o Angular
 
-Navegue até a pasta Frontend e execute os comandos:
+Navegue até a pasta Frontend/Angular e execute os comandos:
 
 ```bash
 npm install
