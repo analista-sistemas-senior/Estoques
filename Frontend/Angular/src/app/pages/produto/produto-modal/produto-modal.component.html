@@ -68,6 +68,11 @@
                             </mat-option>
                         }
                         </mat-select>
+                        @if (formulario.get('inProdutoMedida')?.value) {
+                            <button type="button" matSuffix mat-icon-button aria-label="Limpar seleção" (click)="$event.stopPropagation(); formulario.get('inProdutoMedida')?.setValue(null)">
+                                <mat-icon>close</mat-icon>
+                            </button>
+                        }
                     </mat-form-field>
                 </div>
             </mat-tab>
