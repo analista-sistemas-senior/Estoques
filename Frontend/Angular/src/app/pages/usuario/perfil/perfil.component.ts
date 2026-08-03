@@ -32,6 +32,7 @@ export class UsuarioPerfilComponent implements OnInit {
     ngOnInit(): void {
         this.usuarioPerfilFormulario = this.fb.group(
             {
+                idUsuario: [this.usuario()?.idUsuario],
                 nmUsuario: [this.usuario()?.nmUsuario, [Validators.required, Validators.minLength(3), Validators.maxLength(255)]],
                 nmLogin: [{ value: this.usuario()?.nmLogin, disabled: true }, [Validators.required, Validators.minLength(3), Validators.maxLength(255)]],
                 cdSenha: [null, [Validators.required, Validators.minLength(6), Validators.maxLength(40)]],
