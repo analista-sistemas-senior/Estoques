@@ -134,9 +134,9 @@ npm install
 npx ng serve
 ```
 
-Para acessar o sistema, entre no link local: http://localhost:4200
+Para acessar o sistema de Estoques, entre no link local: http://localhost:4200
 
-Para conferir os endpoints, acesse o link: http://localhost:5237/openapi/v1.json
+Para conferir os endpoints da API Rest, acesse o link local: http://localhost:5237/openapi/v1.json
 
 ## Isenção de Responsabilidade (Disclaimer)
 
