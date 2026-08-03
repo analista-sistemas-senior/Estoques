@@ -4,4 +4,5 @@ import { Component } from '@angular/core';
   selector: 'app-termos-privacidade',
   templateUrl: './termos-privacidade.component.html'
 })
+
 export class TermosPrivacidadeComponent {}
