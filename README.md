@@ -2,7 +2,7 @@
 
 ## Sistema de registro e acompanhamento de estoques
 
-Uma aplicação web descentralizada e de alta performance desenvolvida para o gerenciamento de estoques e acompanhamento histórico de produtos por meio de painéis analíticos interativos. O projeto foi construído com o objetivo de demonstrar competências avançadas em arquitetura de software, desacoplamento de sistemas, boas práticas de API REST em **.NET 10** e desenvolvimento reativo no frontend com **Angular 22** e Signals. **Projeto estritamente acadêmico e de portfólio técnico**.
+Uma aplicação web descentralizada e de alta performance desenvolvida para o gerenciamento de estoques e acompanhamento histórico de produtos por meio de painéis analíticos interativos. O projeto foi construído com o objetivo de demonstrar competências avançadas em arquitetura de software, desacoplamento de sistemas, boas práticas de API REST em **.NET 10** e desenvolvimento reativo no frontend com **Angular 22** e Signals. **Projeto estritamente acadêmico, de portfólio técnico e demonstração arquitetural**.
 
 <p>
     <img src="Imagens/img1.png" alt="Dashboard de Estoques" width="48%">
@@ -83,7 +83,7 @@ Abaixo está a estrutura relacional projetada para suportar o domínio do sistem
 
 - Tratamento de exceções relacionais: em conformidade com o princípio de Responsabilidade Única (SRP), a camada de serviço não conhece o EF Core. O tratamento de violações de integridade de chaves estrangeiras (ex: tentar apagar uma categoria com produtos vinculados) é capturado via `DbUpdateException` diretamente dentro da `Infra.Data`, devolvendo um fluxo limpo de falha sem onerar a memória com Stack Traces globais.
 
-- Design de API RESTful: endpoints em conformidade estrita com os métodos HTTP (GET para leitura, POST para cadastro, PUT para atualização, DELETE para remoção), priorizando parâmetros de rota semânticos em vez de *query strings* desnecessárias, além de documentação e mapeamento automático de schemas via OpenAPI.
+- Design de API RESTful: endpoints em conformidade estrita com os métodos HTTP (`GET` para leitura, `POST` para cadastro, `PUT` para atualização, `DELETE` para remoção), priorizando parâmetros de rota semânticos em vez de *query strings* desnecessárias, além de documentação e mapeamento automático de schemas via OpenAPI.
 
 - Agrupamentos temporais e DTOs otimizados: lógica avançada com LINQ para mapear, filtrar e consolidar dados agregados no backend, garantindo respostas leves ao frontend em requisições únicas.
 
@@ -127,14 +127,14 @@ dotnet run --project Estoques.API
 
 6 - Rodar o Angular
 
-Navegue até a pasta Frontend/Angular e execute os comandos:
+Navegue até a pasta Frontend/Angular e execute os comandos para instalar as dependências e iniciar a aplicação:
 
 ```bash
 npm install
 npx ng serve
 ```
 
-Para acessar o sistema de Estoques, entre no link local: http://localhost:4200
+Para acessar o sistema de Estoques em Angular, entre no link local: http://localhost:4200
 
 Para conferir os endpoints da API Rest, acesse o link local: http://localhost:5237/openapi/v1.json
 
