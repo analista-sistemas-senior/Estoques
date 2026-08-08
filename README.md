@@ -114,7 +114,7 @@ docker compose -f docker-compose-postgre.yml up -d
 
 4 - Certifique-se de que o arquivo appsettings.json do Estoques.API aponta para o endereço do banco local (localhost:5433) com as credenciais configuradas no container. Ajuste também a chave secreta (256 bits) que será utilizada no JWT.
 
-5 - Rodar as Migrations 
+5 - Rodar a Migration e a aplicação
 
 Navegue até a pasta Backend e execute os comandos:
 
