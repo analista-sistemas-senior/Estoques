@@ -10,6 +10,7 @@
 **/usersecrets.json
 Estoques.API/Uploads/Produtos/*
 !Estoques.API/Uploads/Produtos/.gitkeep
+**/dotnet-tools.json
 
 # User-specific files
 *.rsuser
