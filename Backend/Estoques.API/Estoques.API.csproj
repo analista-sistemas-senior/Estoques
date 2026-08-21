@@ -8,6 +8,16 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Uploads\Produtos\.gitkeep" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Uploads\Produtos\.gitkeep">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="FluentValidation" Version="12.1.1" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="10.0.10" />
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="10.0.10" />
@@ -22,10 +32,6 @@
   <ItemGroup>
     <ProjectReference Include="..\Estoques.Domain\Estoques.Domain.csproj" />
     <ProjectReference Include="..\Estoques.Service\Estoques.Service.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Uploads\Produtos\" />
   </ItemGroup>
 
 </Project>
