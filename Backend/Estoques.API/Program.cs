@@ -88,15 +88,15 @@ builder.Services.AddOpenApi();
 var app = builder.Build();
 
 app.UseStaticFiles(new StaticFileOptions { FileProvider = new PhysicalFileProvider(Path.Combine(builder.Environment.ContentRootPath, "Uploads")), RequestPath = "/Uploads" });
+app.MapOpenApi();
 
 if (app.Environment.IsDevelopment())
 {
-    app.MapOpenApi();
     app.UseCors("Desenvolvimento");
 }
 if (!app.Environment.IsDevelopment())
 {
-    app.UseHttpsRedirection();
+    //app.UseHttpsRedirection();
     app.UseCors("Producao");
 }
 
