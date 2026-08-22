@@ -57,7 +57,7 @@ No frontend, a aplicação adota uma arquitetura reativa moderna e modular basea
 
 ### Modelagem do Banco de Dados (MER)
 
-Abaixo está a estrutura relacional projetada para suportar o domínio do sistema, adotando o padrão de nomenclatura de banco de dados do **DoD (Department of Defense)** para garantir consistência, legibilidade e padronização estrita nas tabelas e atributos:
+Abaixo está a estrutura relacional projetada para suportar o domínio do sistema, adotando o padrão de nomenclatura de banco de dados do **DoD (Department of Defense)** para garantir consistência, legibilidade e padronização nas tabelas e atributos:
 
 <p>
     <img src="Imagens/img3.png" alt="Diagrama de Entidade Relacionamento" width="70%">
