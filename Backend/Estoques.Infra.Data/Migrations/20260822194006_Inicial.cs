@@ -92,6 +92,26 @@ namespace Estoques.Infra.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "ProdutoMedida",
+                columns: table => new
+                {
+                    IDProdutoMedida = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    IDUsuario = table.Column<int>(type: "integer", nullable: false),
+                    MDProdutoMedida = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ProdutoMedida", x => x.IDProdutoMedida);
+                    table.ForeignKey(
+                        name: "FK_ProdutoMedida_Usuario_IDUsuario",
+                        column: x => x.IDUsuario,
+                        principalTable: "Usuario",
+                        principalColumn: "IDUsuario",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "ProdutoSituacao",
                 columns: table => new
                 {
@@ -141,12 +161,13 @@ namespace Estoques.Infra.Data.Migrations
                     IDProdutoSituacao = table.Column<int>(type: "integer", nullable: false),
                     IDProdutoFabricante = table.Column<int>(type: "integer", nullable: false),
                     IDUsuario = table.Column<int>(type: "integer", nullable: false),
+                    IDProdutoMedida = table.Column<int>(type: "integer", nullable: true),
                     NMProduto = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: false),
                     DSProduto = table.Column<string>(type: "character varying(1024)", maxLength: 1024, nullable: true),
                     INProdutoCor = table.Column<byte>(type: "smallint", nullable: false),
                     QTProduto = table.Column<decimal>(type: "numeric(18,2)", nullable: true),
-                    INProdutoMedida = table.Column<byte>(type: "smallint", nullable: true),
-                    LKProdutoImagem = table.Column<string>(type: "character varying(1024)", maxLength: 1024, nullable: true)
+                    LKProdutoImagem = table.Column<string>(type: "character varying(1024)", maxLength: 1024, nullable: true),
+                    TXAnotacao = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -156,6 +177,12 @@ namespace Estoques.Infra.Data.Migrations
                         column: x => x.IDProdutoFabricante,
                         principalTable: "ProdutoFabricante",
                         principalColumn: "IDProdutoFabricante",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Produto_ProdutoMedida_IDProdutoMedida",
+                        column: x => x.IDProdutoMedida,
+                        principalTable: "ProdutoMedida",
+                        principalColumn: "IDProdutoMedida",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Produto_ProdutoSituacao_IDProdutoSituacao",
@@ -230,6 +257,11 @@ namespace Estoques.Infra.Data.Migrations
                 column: "IDProdutoFabricante");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Produto_IDProdutoMedida",
+                table: "Produto",
+                column: "IDProdutoMedida");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Produto_IDProdutoSituacao",
                 table: "Produto",
                 column: "IDProdutoSituacao");
@@ -265,6 +297,11 @@ namespace Estoques.Infra.Data.Migrations
                 column: "IDProduto");
 
             migrationBuilder.CreateIndex(
+                name: "IX_ProdutoMedida_IDUsuario",
+                table: "ProdutoMedida",
+                column: "IDUsuario");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_ProdutoSituacao_IDUsuario",
                 table: "ProdutoSituacao",
                 column: "IDUsuario");
@@ -292,6 +329,9 @@ namespace Estoques.Infra.Data.Migrations
 
             migrationBuilder.DropTable(
                 name: "ProdutoFabricante");
+
+            migrationBuilder.DropTable(
+                name: "ProdutoMedida");
 
             migrationBuilder.DropTable(
                 name: "ProdutoSituacao");

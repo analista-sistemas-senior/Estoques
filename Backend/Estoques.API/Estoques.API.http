@@ -142,7 +142,40 @@ Authorization: Bearer {{login.response.body.$.cdToken}}
 }
 
 ### Exclusão do Produto Fabricante
-DELETE {{Estoques.API_HostAddress}}/api/produtos/fabricantes/3
+DELETE {{Estoques.API_HostAddress}}/api/produtos/fabricantes/1
+Content-Type: application/json
+Authorization: Bearer {{login.response.body.$.cdToken}}
+
+
+
+### Produto Medida ================================================
+
+### Retorna Produto Medida
+GET {{Estoques.API_HostAddress}}/api/produtos/medidas
+Content-Type: application/json
+Authorization: Bearer {{login.response.body.$.cdToken}}
+
+### Cadastro do Produto Medida
+POST {{Estoques.API_HostAddress}}/api/produtos/medidas
+Content-Type: application/json
+Authorization: Bearer {{login.response.body.$.cdToken}}
+
+{
+  "MDProdutoMedida": "Medida Teste"
+}
+
+### Atualização do Produto Medida
+PUT {{Estoques.API_HostAddress}}/api/produtos/medidas
+Content-Type: application/json
+Authorization: Bearer {{login.response.body.$.cdToken}}
+
+{
+  "IDProdutoMedida" : 1,
+  "MDProdutoMedida": "Medida Teste Atualizado"
+}
+
+### Exclusão do Produto Medida
+DELETE {{Estoques.API_HostAddress}}/api/produtos/medidas/1
 Content-Type: application/json
 Authorization: Bearer {{login.response.body.$.cdToken}}
 
@@ -243,10 +276,10 @@ IDProduto=1
 IDProdutoTipo=1
 &IDProdutoSituacao=1
 &IDProdutoFabricante=1
-&NMProduto=Produto Teste
-&DSProduto=Descrição Teste
+&NMProduto=Produto Teste Atualizado
+&DSProduto=Descrição Teste Atualizado
 &INProdutoCor=1
-&QTProduto=10.50
+&QTProduto=20.50
 
 ### Exclusão do Produto
 DELETE {{Estoques.API_HostAddress}}/api/produtos/8

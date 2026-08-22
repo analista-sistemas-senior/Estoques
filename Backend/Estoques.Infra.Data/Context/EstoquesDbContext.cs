@@ -13,7 +13,8 @@ namespace Estoques.Infra.Data.Context
         public DbSet<ProdutoSituacao> ProdutoSituacao { get; set; }
         public DbSet<ProdutoTipo> ProdutoTipo { get; set; }
         public DbSet<Usuario> Usuario { get; set; }
-        
+        public DbSet<ProdutoMedida> ProdutoMedida { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(EstoquesDbContext).Assembly);

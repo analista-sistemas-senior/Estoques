@@ -18,6 +18,7 @@ namespace Estoques.Infra.Data.Mappings
             builder.HasMany(u => u.ProdutosSituacoes).WithOne(ps => ps.Usuario).HasForeignKey(ps => ps.IDUsuario).OnDelete(DeleteBehavior.Cascade);
             builder.HasMany(u => u.Produtos).WithOne(p => p.Usuario).HasForeignKey(p => p.IDUsuario).OnDelete(DeleteBehavior.Cascade);
             builder.HasMany(u => u.ProdutosTipos).WithOne(pt => pt.Usuario).HasForeignKey(pt => pt.IDUsuario).OnDelete(DeleteBehavior.Cascade);
+            builder.HasMany(u => u.ProdutosMedidas).WithOne(pf => pf.Usuario).HasForeignKey(pf => pf.IDUsuario).OnDelete(DeleteBehavior.Cascade);
             builder.HasMany(u => u.Fornecedores).WithOne(f => f.Usuario).HasForeignKey(f => f.IDUsuario).OnDelete(DeleteBehavior.Cascade);
             builder.HasMany(u => u.Adquirentes).WithOne(a => a.Usuario).HasForeignKey(a => a.IDUsuario).OnDelete(DeleteBehavior.Cascade);
         }

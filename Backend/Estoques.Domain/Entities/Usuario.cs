@@ -13,6 +13,7 @@
         public virtual ICollection<Produto> Produtos { get; private set; } = [];
         public virtual ICollection<ProdutoSituacao> ProdutosSituacoes { get; private set; } = [];
         public virtual ICollection<ProdutoFabricante> ProdutosFabricantes { get; private set; } = [];
+        public virtual ICollection<ProdutoMedida> ProdutosMedidas { get; private set; } = [];
 
         public Usuario() { }
         public Usuario(int idUsuario, string nmUsuario, string nmLogin, string cdSenha)

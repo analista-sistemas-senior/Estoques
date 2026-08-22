@@ -11,17 +11,17 @@ namespace Estoques.Infra.Data.Repositories
 
         public async Task<Produto?> RetornarProdutoPorId(int idProduto)
         {
-            return await _context.Produto.AsNoTracking().Include(p => p.ProdutoTipo).Include(p => p.ProdutoSituacao).Include(p => p.ProdutoFabricante).FirstOrDefaultAsync(p => p.IDProduto == idProduto);
+            return await _context.Produto.AsNoTracking().Include(p => p.ProdutoTipo).Include(p => p.ProdutoSituacao).Include(p => p.ProdutoFabricante).Include(p => p.ProdutoMedida).FirstOrDefaultAsync(p => p.IDProduto == idProduto);
         }
 
         public async Task<Produto?> RetornarProdutoPorIdEIdUsuario(int idProduto, int idUsuario)
         {
-            return await _context.Produto.AsNoTracking().Include(p => p.ProdutoTipo).Include(p => p.ProdutoSituacao).Include(p => p.ProdutoFabricante).FirstOrDefaultAsync(p => p.IDProduto == idProduto && p.IDUsuario == idUsuario);
+            return await _context.Produto.AsNoTracking().Include(p => p.ProdutoTipo).Include(p => p.ProdutoSituacao).Include(p => p.ProdutoFabricante).Include(p => p.ProdutoMedida).FirstOrDefaultAsync(p => p.IDProduto == idProduto && p.IDUsuario == idUsuario);
         }
 
         public async Task<List<Produto>> RetornarProdutosPorIdUsuario(int idUsuario)
         {
-            return await _context.Produto.AsNoTracking().Include(p => p.ProdutoTipo).Include(p => p.ProdutoSituacao).Include(p => p.ProdutoFabricante).Where(p => p.IDUsuario == idUsuario).ToListAsync();
+            return await _context.Produto.AsNoTracking().Include(p => p.ProdutoTipo).Include(p => p.ProdutoSituacao).Include(p => p.ProdutoFabricante).Include(p => p.ProdutoMedida).Where(p => p.IDUsuario == idUsuario).ToListAsync();
         }
 
         public async Task<Produto> CadastrarProduto(Produto produto)

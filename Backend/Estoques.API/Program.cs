@@ -58,6 +58,7 @@ builder.Services.AddScoped<IProdutoRepository, ProdutoRepository>();
 builder.Services.AddScoped<IProdutoSituacaoRepository, ProdutoSituacaoRepository>();
 builder.Services.AddScoped<IProdutoTipoRepository, ProdutoTipoRepository>();
 builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
+builder.Services.AddScoped<IProdutoMedidaRepository, ProdutoMedidaRepository>();
 
 builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddScoped<IAdquirenteService, AdquirenteService>();
@@ -70,6 +71,7 @@ builder.Services.AddScoped<IProdutoTipoService, ProdutoTipoService>();
 builder.Services.AddScoped<IUsuarioService, UsuarioService>();
 builder.Services.AddScoped<IArmazenamentoService, ArmazenamentoService>();
 builder.Services.AddScoped<IRelatorioService, RelatorioService>();
+builder.Services.AddScoped<IProdutoMedidaService, ProdutoMedidaService>();
 
 builder.Services.AddScoped<IValidator<AutenticacaoEntradaDTO>, AutenticacaoEntradaDTOValidator>();
 builder.Services.AddScoped<IValidator<AdquirenteDTO>, AdquirenteDTOValidator>();
@@ -80,6 +82,7 @@ builder.Services.AddScoped<IValidator<ProdutoHistoricoDTO>, ProdutoHistoricoDTOV
 builder.Services.AddScoped<IValidator<ProdutoSituacaoDTO>, ProdutoSituacaoDTOValidator>();
 builder.Services.AddScoped<IValidator<ProdutoTipoDTO>, ProdutoTipoDTOValidator>();
 builder.Services.AddScoped<IValidator<UsuarioEntradaDTO>, UsuarioEntradaDTOValidator>();
+builder.Services.AddScoped<IValidator<ProdutoMedidaDTO>, ProdutoMedidaDTOValidator>();
 
 builder.Services.AddControllers().ConfigureApiBehaviorOptions(options => { options.SuppressModelStateInvalidFilter = true; });
 

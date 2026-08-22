@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Estoques.Infra.Data.Migrations
 {
     [DbContext(typeof(EstoquesDbContext))]
-    [Migration("20260730211030_Inicial")]
+    [Migration("20260822194006_Inicial")]
     partial class Inicial
     {
         /// <inheritdoc />
@@ -102,6 +102,9 @@ namespace Estoques.Infra.Data.Migrations
                     b.Property<int>("IDProdutoFabricante")
                         .HasColumnType("integer");
 
+                    b.Property<int?>("IDProdutoMedida")
+                        .HasColumnType("integer");
+
                     b.Property<int>("IDProdutoSituacao")
                         .HasColumnType("integer");
 
@@ -112,9 +115,6 @@ namespace Estoques.Infra.Data.Migrations
                         .HasColumnType("integer");
 
                     b.Property<byte>("INProdutoCor")
-                        .HasColumnType("smallint");
-
-                    b.Property<byte?>("INProdutoMedida")
                         .HasColumnType("smallint");
 
                     b.Property<string>("LKProdutoImagem")
@@ -129,9 +129,15 @@ namespace Estoques.Infra.Data.Migrations
                     b.Property<decimal?>("QTProduto")
                         .HasColumnType("numeric(18,2)");
 
+                    b.Property<string>("TXAnotacao")
+                        .HasMaxLength(255)
+                        .HasColumnType("character varying(255)");
+
                     b.HasKey("IDProduto");
 
                     b.HasIndex("IDProdutoFabricante");
+
+                    b.HasIndex("IDProdutoMedida");
 
                     b.HasIndex("IDProdutoSituacao");
 
@@ -203,6 +209,29 @@ namespace Estoques.Infra.Data.Migrations
                     b.HasIndex("IDProduto");
 
                     b.ToTable("ProdutoHistorico", (string)null);
+                });
+
+            modelBuilder.Entity("Estoques.Domain.Entities.ProdutoMedida", b =>
+                {
+                    b.Property<int>("IDProdutoMedida")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("IDProdutoMedida"));
+
+                    b.Property<int>("IDUsuario")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("MDProdutoMedida")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("character varying(255)");
+
+                    b.HasKey("IDProdutoMedida");
+
+                    b.HasIndex("IDUsuario");
+
+                    b.ToTable("ProdutoMedida", (string)null);
                 });
 
             modelBuilder.Entity("Estoques.Domain.Entities.ProdutoSituacao", b =>
@@ -309,6 +338,11 @@ namespace Estoques.Infra.Data.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
+                    b.HasOne("Estoques.Domain.Entities.ProdutoMedida", "ProdutoMedida")
+                        .WithMany("Produtos")
+                        .HasForeignKey("IDProdutoMedida")
+                        .OnDelete(DeleteBehavior.Restrict);
+
                     b.HasOne("Estoques.Domain.Entities.ProdutoSituacao", "ProdutoSituacao")
                         .WithMany("Produtos")
                         .HasForeignKey("IDProdutoSituacao")
@@ -328,6 +362,8 @@ namespace Estoques.Infra.Data.Migrations
                         .IsRequired();
 
                     b.Navigation("ProdutoFabricante");
+
+                    b.Navigation("ProdutoMedida");
 
                     b.Navigation("ProdutoSituacao");
 
@@ -373,6 +409,17 @@ namespace Estoques.Infra.Data.Migrations
                     b.Navigation("Produto");
                 });
 
+            modelBuilder.Entity("Estoques.Domain.Entities.ProdutoMedida", b =>
+                {
+                    b.HasOne("Estoques.Domain.Entities.Usuario", "Usuario")
+                        .WithMany("ProdutosMedidas")
+                        .HasForeignKey("IDUsuario")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Usuario");
+                });
+
             modelBuilder.Entity("Estoques.Domain.Entities.ProdutoSituacao", b =>
                 {
                     b.HasOne("Estoques.Domain.Entities.Usuario", "Usuario")
@@ -415,6 +462,11 @@ namespace Estoques.Infra.Data.Migrations
                     b.Navigation("Produtos");
                 });
 
+            modelBuilder.Entity("Estoques.Domain.Entities.ProdutoMedida", b =>
+                {
+                    b.Navigation("Produtos");
+                });
+
             modelBuilder.Entity("Estoques.Domain.Entities.ProdutoSituacao", b =>
                 {
                     b.Navigation("Produtos");
@@ -434,6 +486,8 @@ namespace Estoques.Infra.Data.Migrations
                     b.Navigation("Produtos");
 
                     b.Navigation("ProdutosFabricantes");
+
+                    b.Navigation("ProdutosMedidas");
 
                     b.Navigation("ProdutosSituacoes");
 

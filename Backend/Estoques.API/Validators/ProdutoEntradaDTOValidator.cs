@@ -12,8 +12,8 @@ namespace Estoques.API.Validators {
             RuleFor(p => p.NMProduto).NotEmpty().MaximumLength(255);
             RuleFor(p => p.DSProduto).MaximumLength(1024);
             RuleFor(p => p.INProdutoCor).IsInEnum();
-            RuleFor(p => p.INProdutoMedida).IsInEnum();
             RuleFor(p => p.LKProdutoImagem).MaximumLength(1024);
+            RuleFor(p => p.TXAnotacao).MaximumLength(255);
         }
     }
 }
