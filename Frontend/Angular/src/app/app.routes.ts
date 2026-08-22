@@ -12,6 +12,7 @@ export const routes: Routes = [
             { path: 'produto/tipo', loadComponent: () => import('./pages/produto-tipo/produto-tipo.component').then(m => m.ProdutoTipoComponent) },
             { path: 'produto/situacao', loadComponent: () => import('./pages/produto-situacao/produto-situacao.component').then(m => m.ProdutoSituacaoComponent) },
             { path: 'produto/fabricante', loadComponent: () => import('./pages/produto-fabricante/produto-fabricante.component').then(m => m.ProdutoFabricanteComponent) },
+            { path: 'produto/medida', loadComponent: () => import('./pages/produto-medida/produto-medida.component').then(m => m.ProdutoMedidaComponent) },
             { path: 'adquirente', loadComponent: () => import('./pages/adquirente/adquirente.component').then(m => m.AdquirenteComponent) },
             { path: 'fornecedor', loadComponent: () => import('./pages/fornecedor/fornecedor.component').then(m => m.FornecedorComponent) },
             { path: 'usuario/perfil', loadComponent: () => import('./pages/usuario/perfil/perfil.component').then(m => m.UsuarioPerfilComponent) },

@@ -8,22 +8,24 @@ export interface ProdutoListaResposta {
     idProdutoTipo: number;
     idProdutoSituacao: number;
     idProdutoFabricante: number;
+    idProdutoMedida: number;
     nmProduto: string;
     dsProduto: string;
     inProdutoCor: number;
     qtProduto: number;
-    inProdutoMedida: number;
     lkProdutoImagem: string;
+    txAnotacao: string;
 }
 export interface ProdutoCadastroRequisicao {
     idProdutoTipo: number;
     idProdutoSituacao: number;
     idProdutoFabricante: number;
+    idProdutoMedida: number;
     nmProduto: string;
     dsProduto: string;
     inProdutoCor: number;
-    inProdutoMedida: number;
     lkProdutoImagem: string;
+    txAnotacao: string;
     arquivo: File;
 }
 export interface ProdutoCadastroResposta {
@@ -31,23 +33,25 @@ export interface ProdutoCadastroResposta {
     idProdutoTipo: number;
     idProdutoSituacao: number;
     idProdutoFabricante: number;
+    idProdutoMedida: number;
     nmProduto: string;
     dsProduto: string;
     inProdutoCor: number;
     qtProduto: number;
-    inProdutoMedida: number;
     lkProdutoImagem: string;
+    txAnotacao: string;
 }
 export interface ProdutoAtualizacaoRequisicao {
     idProduto: number;
     idProdutoTipo: number;
     idProdutoSituacao: number;
     idProdutoFabricante: number;
+    idProdutoMedida: number;
     nmProduto: string;
     dsProduto: string;
     inProdutoCor: number;
-    inProdutoMedida: number;
     lkProdutoImagem: string;
+    txAnotacao: string;
     arquivo: File;
 }
 export interface ProdutoExclusaoRequisicao {
@@ -69,11 +73,12 @@ export class ProdutoService {
         formulario.append('idProdutoTipo', dados.idProdutoTipo.toString());
         formulario.append('idProdutoSituacao', dados.idProdutoSituacao.toString());
         formulario.append('idProdutoFabricante', dados.idProdutoFabricante.toString());
+        if (dados.idProdutoMedida !== null) formulario.append('idProdutoMedida', dados.idProdutoMedida.toString());
         formulario.append('nmProduto', dados.nmProduto);
         if (dados.dsProduto !== null) formulario.append('dsProduto', dados.dsProduto);
         formulario.append('inProdutoCor', dados.inProdutoCor?.toString());
-        if (dados.inProdutoMedida !== null) formulario.append('inProdutoMedida', dados.inProdutoMedida.toString());
         formulario.append('lkProdutoImagem', dados.lkProdutoImagem);
+        if (dados.txAnotacao !== null) formulario.append('txAnotacao', dados.txAnotacao);
         if (dados.arquivo) formulario.append('arquivo', dados.arquivo, dados.arquivo.name);
 
         return this.http.post<ProdutoCadastroResposta>(this.apiUrl, formulario);
@@ -86,11 +91,12 @@ export class ProdutoService {
         formulario.append('idProdutoTipo', dados.idProdutoTipo.toString());
         formulario.append('idProdutoSituacao', dados.idProdutoSituacao.toString());
         formulario.append('idProdutoFabricante', dados.idProdutoFabricante.toString());
+        if (dados.idProdutoMedida !== null) formulario.append('idProdutoMedida', dados.idProdutoMedida.toString());
         formulario.append('nmProduto', dados.nmProduto);
         if (dados.dsProduto !== null) formulario.append('dsProduto', dados.dsProduto);
         formulario.append('inProdutoCor', dados.inProdutoCor.toString());
-        if (dados.inProdutoMedida !== null) formulario.append('inProdutoMedida', dados.inProdutoMedida.toString());
         if (dados.lkProdutoImagem !== null) formulario.append('lkProdutoImagem', dados.lkProdutoImagem.toString());
+        if (dados.txAnotacao !== null) formulario.append('txAnotacao', dados.txAnotacao.toString());
         if (dados.arquivo) formulario.append('arquivo', dados.arquivo, dados.arquivo.name);
 
         return this.http.put<void>(this.apiUrl, formulario);

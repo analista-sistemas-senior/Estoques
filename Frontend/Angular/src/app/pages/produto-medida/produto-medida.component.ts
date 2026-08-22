@@ -7,66 +7,52 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { ProdutoService } from '../../core/services/produto.service';
+import { ProdutoMedidaService } from '../../core/services/produto-medida.service';
 import { MatDialog } from '@angular/material/dialog';
-import { ProdutoModalComponent } from './produto-modal/produto-modal.component';
+import { ProdutoMedidaModalComponent } from './produto-medida-modal/produto-medida-modal.component';
 import { DialogoConfirmacaoComponent } from '../../shared/components/dialogo-confirmacao.component';
-import { environment } from '../../../environments/environment';
-import { ProdutoCor } from '../../shared/enums/produto-cor.enum';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 
-export interface Produto {
-    idProduto: number;
-    idProdutoTipo: number;
-    idProdutoSituacao: number;
-    idProdutoFabricante: number;
+export interface ProdutoMedida {
     idProdutoMedida: number;
-    nmProduto: string;
-    dsProduto: string;
-    inProdutoCor: number;
-    lkProdutoImagem: string;
-    txAnotacao: string;
+    mdProdutoMedida: string;
 }
 
 @Component({
-    selector: 'app-produto',
-    imports: [CommonModule, MatTableModule, MatPaginatorModule, MatSortModule, MatButtonModule, MatIconModule, MatInputModule, MatFormFieldModule, MatSnackBarModule, MatProgressBarModule],
-    templateUrl: './produto.component.html'
+  selector: 'app-produto-medida',
+  imports: [CommonModule, MatTableModule, MatPaginatorModule, MatSortModule, MatButtonModule, MatIconModule, MatInputModule, MatFormFieldModule, MatSnackBarModule, MatProgressBarModule],
+  templateUrl: './produto-medida.component.html'
 })
 
-export class ProdutoComponent implements OnInit {
-    private readonly produtoService = inject(ProdutoService);
+export class ProdutoMedidaComponent implements OnInit {
+    private readonly produtoMedidaService = inject(ProdutoMedidaService);
     private readonly dialog = inject(MatDialog);
     private readonly snackBar = inject(MatSnackBar);
-    dataSource = new MatTableDataSource<Produto>([]);
-    displayedColumns: string[] = ['lkProdutoImagem', 'nmProduto', 'dsProduto', 'produtoTipo', 'produtoFabricante', 'inProdutoCor', 'produtoMedida', 'acoes'];
-    apiBase = environment.apiUrlBase;
+    dataSource = new MatTableDataSource<ProdutoMedida>([]);
+    displayedColumns: string[] = ['mdProdutoMedida', 'acoes'];
     abrindo = signal<boolean>(false);
 
     @ViewChild(MatPaginator) paginacao!: MatPaginator;
     @ViewChild(MatSort) ordenacao!: MatSort;
 
     ngOnInit(): void {
-        this.carregarProdutos();
+        this.carregarProdutoMedidas();
     }
 
-    ngAfterViewInit(): void {
-        this.dataSource.paginator = this.paginacao;
-        this.dataSource.sort = this.ordenacao;
-    }
-
-    carregarProdutos(): void {
+    carregarProdutoMedidas(): void {
         this.abrindo.set(true);
-        this.produtoService.listar().subscribe({
+        this.produtoMedidaService.listar().subscribe({
             next: (dados) => {
                 this.dataSource.data = dados;
+                this.dataSource.paginator = this.paginacao;
+                this.dataSource.sort = this.ordenacao;
                 this.abrindo.set(false);
             },
             error: (erro) => {
-                this.snackBar.open(`Erro ao carregar produtos: ${erro}`, 'OK', { duration: 3000, horizontalPosition: 'center', verticalPosition: 'top' });
+                this.snackBar.open(`Erro ao carregar medidas: ${erro}`, 'OK', { duration: 3000, horizontalPosition: 'center', verticalPosition: 'top' });
                 this.abrindo.set(false);
-                console.error('Erro ao carregar produtos: ', erro);
+                console.error('Erro ao carregar medidas: ', erro);
             }
         });
     }
@@ -77,21 +63,21 @@ export class ProdutoComponent implements OnInit {
         if (this.dataSource.paginator) this.dataSource.paginator.firstPage();
     }
 
-    abrirModal(produto?: Produto): void {
-        const dialogRef = this.dialog.open(ProdutoModalComponent, { width: '500px', data: produto ?? null });
+    abrirModal(produtoMedida?: ProdutoMedida): void {
+        const dialogRef = this.dialog.open(ProdutoMedidaModalComponent, { width: '500px', data: produtoMedida ?? null });
         dialogRef.afterClosed().subscribe(resultado => {
             if (resultado) {
-                if (resultado.idProduto && resultado.idProduto > 0) {
-                    this.produtoService.atualizar(resultado).subscribe({
-                        next: () => this.carregarProdutos(),
+                if (resultado.idProdutoMedida && resultado.idProdutoMedida > 0) {
+                    this.produtoMedidaService.atualizar(resultado).subscribe({
+                        next: () => this.carregarProdutoMedidas(),
                         error: (erro) => {
                             this.snackBar.open(`Não atualizado: ${erro}`, 'OK', { duration: 3000, horizontalPosition: 'center', verticalPosition: 'top' });
-                            console.error('Não atualizado: ', erro);
+                            console.error('Não atualizado: ', erro)
                         }
                     });
                 } else {
-                    this.produtoService.cadastrar(resultado).subscribe({
-                        next: () => this.carregarProdutos(),
+                    this.produtoMedidaService.cadastrar(resultado).subscribe({
+                        next: () => this.carregarProdutoMedidas(),
                         error: (erro) => {
                             this.snackBar.open(`Não cadastrado: ${erro}`, 'OK', { duration: 3000, horizontalPosition: 'center', verticalPosition: 'top' });
                             console.error('Não cadastrado: ', erro);
@@ -104,14 +90,14 @@ export class ProdutoComponent implements OnInit {
 
     excluir(id: number): void {
         const dialogRef = this.dialog.open(DialogoConfirmacaoComponent, {
-          width: '400px', data: {}
+            width: '400px', data: {}
         });
         dialogRef.afterClosed().subscribe((confirmado: boolean) => {
             if (confirmado) {
                 this.abrindo.set(true);
-                this.produtoService.excluir(id).subscribe({
+                this.produtoMedidaService.excluir(id).subscribe({
                     next: () => {
-                        this.carregarProdutos(),
+                        this.carregarProdutoMedidas(),
                         this.abrindo.set(false);
                     },
                     error: (erro) => {
@@ -121,9 +107,5 @@ export class ProdutoComponent implements OnInit {
                 });
             }
         });
-    }
-
-    retornarCor(id: number): string {
-        return ProdutoCor[id];
     }
 }

@@ -60,19 +60,23 @@
                         </mat-select>
                     </mat-form-field>
                     <mat-form-field appearance="outline" class="w-full">
-                        <mat-label>Medida do Produto</mat-label>
-                        <mat-select formControlName="inProdutoMedida">
-                        @for (cor of produtoMedidas; track cor.id) {
-                            <mat-option [value]="cor.id">
-                                {{ cor.nome }}
-                            </mat-option>
-                        }
+                        <mat-label>Medida do produto</mat-label>
+                        <mat-select formControlName="idProdutoMedida">
+                            @for (medida of produtoMedida; track medida.idProdutoMedida) {
+                                <mat-option [value]="medida.idProdutoMedida">
+                                    {{ medida.mdProdutoMedida }}
+                                </mat-option>
+                            }
                         </mat-select>
-                        @if (formulario.get('inProdutoMedida')?.value) {
-                            <button type="button" matSuffix mat-icon-button aria-label="Limpar seleção" (click)="$event.stopPropagation(); formulario.get('inProdutoMedida')?.setValue(null)">
+                        @if (formulario.get('idProdutoMedida')?.value) {
+                            <button type="button" matSuffix mat-icon-button aria-label="Limpar seleção" (click)="$event.stopPropagation(); formulario.get('idProdutoMedida')?.setValue(null)">
                                 <mat-icon>close</mat-icon>
                             </button>
                         }
+                    </mat-form-field>
+                    <mat-form-field appearance="outline" class="w-full text-sm">
+                        <mat-label>Anotação</mat-label>
+                        <input matInput formControlName="txAnotacao">
                     </mat-form-field>
                 </div>
             </mat-tab>
@@ -80,7 +84,7 @@
                 <div class="flex flex-col gap-4 pt-8 h-75 items-center">
                     @if (produtoImagem) {
                         <div class="relative w-80 h-40 border rounded-lg overflow-hidden shadow-sm">
-                            <img [src]="apiBase + produtoImagem" alt="Imagem do Produto" class="w-full h-full object-cover">
+                            <img [src]="imagemVista" alt="Imagem do Produto" class="w-full h-full object-cover">
                         </div>
                     } @else {
                         <div class="w-80 h-40 border-2 border-dashed rounded-lg flex items-center justify-center text-gray-400">

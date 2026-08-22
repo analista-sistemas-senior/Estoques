@@ -14,7 +14,6 @@ import { ProdutoHistoricoModalComponent } from './produto-historico-modal/produt
 import { DialogoConfirmacaoComponent } from '../../shared/components/dialogo-confirmacao.component';
 import { environment } from '../../../environments/environment';
 import { ProdutoCor } from '../../shared/enums/produto-cor.enum';
-import { ProdutoMedida } from '../../shared/enums/produto-medida.enum';
 import { ProdutoHistorico } from '../../shared/enums/produto-historico.enum';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
@@ -27,8 +26,8 @@ export interface Produto {
     nmProduto: string;
     dsProduto: string;
     inProdutoCor: number;
-    inProdutoMedida: number;
     lkProdutoImagem: string;
+    txAnotacao: string;
     produtoHistorico?: ProdutoHistoricoItem[];
 }
 export interface ProdutoHistoricoItem {
@@ -55,7 +54,7 @@ export class ProdutoHistoricoComponent implements OnInit {
     private readonly dialog = inject(MatDialog);
     private readonly snackBar = inject(MatSnackBar);
     dataSource = new MatTableDataSource<Produto>([]);
-    displayedColumns: string[] = ['expandir','lkProdutoImagem', 'nmProduto', 'dsProduto', 'produtoTipo', 'produtoFabricante', 'inProdutoCor', 'qtProduto', 'inProdutoMedida', 'acoes'];
+    displayedColumns: string[] = ['expandir','lkProdutoImagem', 'nmProduto', 'dsProduto', 'produtoTipo', 'produtoFabricante', 'inProdutoCor', 'qtProduto', 'produtoMedida', 'acoes'];
     apiBase = environment.apiUrlBase;
     elementoExpandido = signal<number | null>(null);
     tipoHistorico = Object.keys(ProdutoHistorico).filter((key) => isNaN(Number(key))).map((key) => ({ id: ProdutoHistorico[key as keyof typeof ProdutoHistorico], nome: key }));
@@ -148,10 +147,6 @@ export class ProdutoHistoricoComponent implements OnInit {
 
     retornarCor(id: number): string {
         return ProdutoCor[id];
-    }
-
-    retornarMedida(id: number): string {
-        return ProdutoMedida[id] ?? 'Não informada';
     }
 
     toggleRow(elemento: Produto) {

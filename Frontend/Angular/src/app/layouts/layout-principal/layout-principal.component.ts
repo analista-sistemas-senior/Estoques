@@ -14,7 +14,7 @@ export class LayoutPrincipalComponent {
     private readonly router = inject(Router);
     readonly usuario = this.autenticacaoService.usuarioDados;
     readonly anoAtual = new Date().getFullYear();
-    readonly versao = "1.0.0";
+    readonly versao = "1.0.1";
     menuAberto = signal<boolean>(false);
 
     alternarMenu(): void {

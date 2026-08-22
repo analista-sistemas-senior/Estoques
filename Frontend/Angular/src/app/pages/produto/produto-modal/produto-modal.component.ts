@@ -10,9 +10,9 @@ import { ProdutoListaResposta } from '../../../core/services/produto.service';
 import { ProdutoFabricanteService } from '../../../core/services/produto-fabricante.service';
 import { ProdutoSituacaoService } from '../../../core/services/produto-situacao.service';
 import { ProdutoTipoService } from '../../../core/services/produto-tipo.service';
+import { ProdutoMedidaService } from '../../../core/services/produto-medida.service';
 import { MatSelectModule } from '@angular/material/select';
 import { ProdutoCor } from '../../../shared/enums/produto-cor.enum';
-import { ProdutoMedida } from '../../../shared/enums/produto-medida.enum';
 import { MatTabsModule } from '@angular/material/tabs';
 import { environment } from '../../../../environments/environment';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
@@ -30,6 +30,7 @@ export class ProdutoModalComponent implements OnInit {
     private readonly produtoFabricanteService = inject(ProdutoFabricanteService);
     private readonly produtoSituacaoService = inject(ProdutoSituacaoService);
     private readonly produtoTipoService = inject(ProdutoTipoService);
+    private readonly produtoMedidaService = inject(ProdutoMedidaService);
     private readonly cdr = inject(ChangeDetectorRef);
     data: ProdutoListaResposta | null = inject(MAT_DIALOG_DATA);
     apiBase = environment.apiUrlBase;
@@ -37,21 +38,22 @@ export class ProdutoModalComponent implements OnInit {
     produtoTipo: any[] = [];
     produtoSituacao: any[] = [];
     produtoFabricante: any[] = [];
+    produtoMedida: any[] = [];
     produtoImagem: string | ArrayBuffer | null = null;
     produtoImagemSelecionada: File | null = null;
     produtoCores = Object.keys(ProdutoCor).filter((key) => isNaN(Number(key))).map((key) => ({ id: ProdutoCor[key as keyof typeof ProdutoCor], nome: key })).sort((a, b) => a.nome.localeCompare(b.nome));
-    produtoMedidas = Object.keys(ProdutoMedida).filter((key) => isNaN(Number(key))).map((key) => ({ id: ProdutoMedida[key as keyof typeof ProdutoMedida], nome: key }));
 
     formulario: FormGroup = this.fb.group({
         idProduto: [this.data?.idProduto ?? 0],
         idProdutoTipo: [this.data?.idProdutoTipo, [Validators.required]],
         idProdutoSituacao: [this.data?.idProdutoSituacao, [Validators.required]],
         idProdutoFabricante: [this.data?.idProdutoFabricante, [Validators.required]],
+        idProdutoMedida: [this.data?.idProdutoMedida],
         nmProduto: [this.data?.nmProduto, [Validators.required, Validators.minLength(3), Validators.maxLength(255)]],
         dsProduto: [this.data?.dsProduto, [Validators.minLength(3), Validators.maxLength(1024)]],
         inProdutoCor: [this.data?.inProdutoCor, [Validators.required]],
-        inProdutoMedida: [this.data?.inProdutoMedida],
-        lkProdutoImagem: [this.data?.lkProdutoImagem, [Validators.minLength(3), Validators.maxLength(1024)]]
+        lkProdutoImagem: [this.data?.lkProdutoImagem, [Validators.minLength(3), Validators.maxLength(1024)]],
+        txAnotacao: [this.data?.txAnotacao, [Validators.minLength(3), Validators.maxLength(255)]]
     });
 
     ngOnInit(): void {
@@ -83,6 +85,14 @@ export class ProdutoModalComponent implements OnInit {
                 console.error('Erro ao carregar tipos dos produtos: ', erro)
             }
         });
+
+        this.produtoMedidaService.listar().subscribe({
+            next: (dados) => (this.produtoMedida = dados),
+            error: (erro) => {
+                this.snackBar.open(`Erro ao carregar medidas dos produtos: ${erro}`, 'OK', { duration: 3000, horizontalPosition: 'center', verticalPosition: 'top' });
+                console.error('Erro ao carregar medidas dos produtos: ', erro)
+            }
+        });
     }
 
     salvar(): void {
@@ -100,14 +110,20 @@ export class ProdutoModalComponent implements OnInit {
         const input = event.target as HTMLInputElement;
 
         if (input.files && input.files[0]) {
-            this.apiBase = "";
             this.produtoImagemSelecionada = input.files[0];        
             const reader = new FileReader();
             reader.onload = () => {
-                this.produtoImagem = reader.result;
+                this.produtoImagem = reader.result as string;
                 this.cdr.detectChanges();
             };
             reader.readAsDataURL(this.produtoImagemSelecionada);
         }
+    }
+
+    get imagemVista(): string {
+        if (typeof this.produtoImagem === 'string' && this.produtoImagem.startsWith('data:')) {
+            return this.produtoImagem;
+        }
+        return `${this.apiBase}${this.produtoImagem}`;
     }
 }
